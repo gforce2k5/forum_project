@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 26, 2019 at 06:21 PM
+-- Generation Time: Mar 26, 2019 at 07:21 PM
 -- Server version: 5.7.24
 -- PHP Version: 7.2.14
 
@@ -31,11 +31,11 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` tinytext NOT NULL,
+  `name` text NOT NULL,
   `cat_order` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -46,13 +46,14 @@ CREATE TABLE IF NOT EXISTS `categories` (
 DROP TABLE IF EXISTS `forums`;
 CREATE TABLE IF NOT EXISTS `forums` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `topic` tinytext NOT NULL,
+  `topic` text NOT NULL,
+  `description` text NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cat_order` int(11) NOT NULL,
   `cat_id` int(10) UNSIGNED NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `forum_managers` (
   `user_id` int(11) NOT NULL,
   `forum_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -77,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `forum_managers` (
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE IF NOT EXISTS `posts` (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` tinytext NOT NULL,
-  `content` text NOT NULL,
+  `title` text NOT NULL,
+  `content` mediumtext NOT NULL,
   `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `is_pinned` tinyint(1) NOT NULL,
   `is_locked` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -98,19 +99,19 @@ CREATE TABLE IF NOT EXISTS `posts` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) UNSIGNED NOT NULL,
-  `first_name` tinytext NOT NULL,
-  `last_name` tinytext NOT NULL,
+  `first_name` text NOT NULL,
+  `last_name` text NOT NULL,
   `password` varchar(64) NOT NULL,
   `avatar` blob NOT NULL,
   `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_entry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_admin` tinyint(1) NOT NULL,
-  `signature` text NOT NULL,
-  `email` tinytext NOT NULL,
+  `signature` mediumtext NOT NULL,
+  `email` text NOT NULL,
   `hash` varchar(64) DEFAULT NULL,
   `is_verified` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
