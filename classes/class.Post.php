@@ -4,5 +4,9 @@ class Post{
     function __construct($topic, $description, $categoryId){
         
     }
+
+    function createPost(){
+        
+    }
 }
 ?>
