@@ -1,2 +1,6 @@
 .DS_Store
+<<<<<<< HEAD
 /functions/user_settings.php
+=======
+functions/user_settings.php
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65

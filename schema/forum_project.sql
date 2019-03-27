@@ -2,10 +2,17 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
+<<<<<<< HEAD
 -- Host: localhost
 -- Generation Time: Mar 27, 2019 at 11:19 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
+=======
+-- Host: 127.0.0.1:3306
+-- Generation Time: Mar 26, 2019 at 07:21 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.14
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,11 +35,21 @@ SET time_zone = "+00:00";
 -- Table structure for table `categories`
 --
 
+<<<<<<< HEAD
 CREATE TABLE `categories` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` text NOT NULL,
   `cat_order` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL
+=======
+DROP TABLE IF EXISTS `categories`;
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `cat_order` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -41,14 +58,25 @@ CREATE TABLE `categories` (
 -- Table structure for table `forums`
 --
 
+<<<<<<< HEAD
 CREATE TABLE `forums` (
   `id` int(10) UNSIGNED NOT NULL,
+=======
+DROP TABLE IF EXISTS `forums`;
+CREATE TABLE IF NOT EXISTS `forums` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
   `topic` text NOT NULL,
   `description` text NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cat_order` int(11) NOT NULL,
   `cat_id` int(10) UNSIGNED NOT NULL,
+<<<<<<< HEAD
   `active` tinyint(1) NOT NULL
+=======
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -60,7 +88,12 @@ CREATE TABLE `forums` (
 CREATE TABLE `forum_managers` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
+<<<<<<< HEAD
   `forum_id` int(11) NOT NULL
+=======
+  `forum_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -69,8 +102,14 @@ CREATE TABLE `forum_managers` (
 -- Table structure for table `posts`
 --
 
+<<<<<<< HEAD
 CREATE TABLE `posts` (
   `id` int(10) UNSIGNED NOT NULL,
+=======
+DROP TABLE IF EXISTS `posts`;
+CREATE TABLE IF NOT EXISTS `posts` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
   `title` text NOT NULL,
   `content` mediumtext NOT NULL,
   `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -79,7 +118,12 @@ CREATE TABLE `posts` (
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
   `post_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
+<<<<<<< HEAD
   `is_locked` tinyint(1) NOT NULL
+=======
+  `is_locked` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -90,7 +134,10 @@ CREATE TABLE `posts` (
 
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
+<<<<<<< HEAD
   `username` tinytext NOT NULL,
+=======
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
   `first_name` text NOT NULL,
   `last_name` text NOT NULL,
   `password` varchar(64) NOT NULL,
@@ -101,6 +148,7 @@ CREATE TABLE `users` (
   `signature` mediumtext NOT NULL,
   `email` text NOT NULL,
   `hash` varchar(64) DEFAULT NULL,
+<<<<<<< HEAD
   `is_verified` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -165,6 +213,11 @@ ALTER TABLE `forum_managers`
 --
 ALTER TABLE `posts`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+=======
+  `is_verified` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+>>>>>>> 16dded6e5ffe5d7e9202225a285b57466ddaac65
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
