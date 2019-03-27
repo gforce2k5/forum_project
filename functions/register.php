@@ -1,41 +1,68 @@
 <?php
   require_once('settings.php');
-  require_once('formvalidator.php');
 
-  if ($_POST['Submit']) {
-    $validator = new FormValidator();
-    $validator->addValidation("confirm", "shouldelchk", "נא הסכם לתקנון");
-    $validator->addValidation("name", "req", "נא הכנס שם משתמש");
-    $validator->addValidation("name", "alnum", "שם המשתמש חייב להכיל אותיות ומספרים באנגלית בלבד");
-    $validator->addValidation("name", "minlen=4", "שם משתמש חייב להכיל 4 תווים לפחות");
-    $validator->addValidation("first_name", "req", "נא הכנס שם פרטי");
-    $validator->addValidation("last_name", "req", "נא הכנס שם משפחה");
-    $validator->addValidation("password", "req", "נא הכנס סיססמא");
-    $validator->addValidation("password", "regexp=^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$",
-      "הסיסמא חייבת להכיל 6 תווים לפחות וחייבת להעיל אות קטנה, אות גדולה ומספר");
-    $validator->addValidation("password", "eqelmnt=confirm_pwd", "הסיסמאות שהכנסת לא זהות");
-    $validator->addValidation("email", "req", "נא הכנס כתובת דוא\"ל");
-    $validator->addValidation("email", "email", "נא הכנס כתובת דוא\"ל תקינה");
+  $username = $password = $email = $confirmpwd = $divur = $fname = $lname = "";
 
-    if ($validator->ValidateForm()) {
-      $sql = new SQL($link, "SELECT id FROM users WHERE username='{$_POST['username']}'");
-      if ($sql->rows() > 0) {
-        echo "שם המשתמש שבחרת תפוס";
-      } else {
-        $email_verification = md5(rand());
-        $sql = new SQL($link, "INSERT INTO users(username, first_name, last_name, password, email, hash)".
-          " VALUES ('{$_POST['username']}', '{$_POST['first_name']}', '{$_POST['last_name']}'".
-          ", '{$_POST['password']}', '{$_POST['email']}', '$email_verification');");
+  $errors = [];
+
+  if ($_POST['submit']) {
+    if (isset($_POST['username'])) {
+      $username = test_input($_POST['username']);
+      if (!preg_match('/^[A-Za-z0-9]{4,}$/', $username)) {
+        $errors = add_error('username', 'שם המשתמש יכול להכיל אותיות גדולות וקטנות באנגלית ומספרים בלבד', $errors);
       }
     } else {
-      echo "<B>Validation Errors:</B>";
+      $errors = add_error('username', 'נא הכנס שם משתמש', $errors);
+    }
 
-      $error_hash = $validator->GetErrors();
-      foreach($error_hash as $inpname => $inp_err)
-      {
-        echo "<p>$inpname : $inp_err</p>\n";
+    if (isset($_POST['password']) && isset($_POST['confirmpwd'])) {
+      $password = test_input($_POST['password']);
+      $confirmpwd = test_input($_POST['confirmpwd']);
+      if (!($password === $confirmpwd)) {
+        $errors = add_error('password', 'הסיסמאות שהוכנסו לא זהות', $errors);
+      } else {
+        if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/', $password)) {
+          $errors = add_error('password', 'הסיסמא חייבת להכיל לפחות אות גדולה, אות קטנה ומספר', $errors);
+        }
       }
+    } else {
+      $errors = add_error('password', 'אחת משדות הסיסמא ריקות', $errors);
+    }
+
+    if (isset($_POST['email'])) {
+      $email = test_input($_POST['email']);
+      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors = add_error('email', 'האימייל שהוכנס אינו תקין', $errors);
+      }
+    } else {
+      $errors = add_error('email', 'לא הוכנסה כתובת אימייל', $errors);
+    }
+
+    if (isset($_POST['first_name'])) {
+      $fname = test_input($_POST['first_name']);
+    } else {
+      $errors = add_error('fname', 'לא הוכנס שם פרטי', $errors);
+    }
+
+    if (isset($_POST['last_name'])) {
+      $lname = test_input($_POST['last_name']);
+    } else {
+      $errors = add_error('lname', 'לא הוכנס שם משפחה', $errors);
+    }
+    
+    if (!isset($_POST['divur'])) {
+      $errors = add_error("divur", "קרא את התקנון ואשר אותו", $errors);
+    }
+
+    if (count($errors) === 0) {
+      $user = new User($username, $password, $fname, $lname, $email);
+      $user->add_to_db($link);
+    } else {
+      echo '<pre>';
+      print_r($errors);
+      print_r($_POST);
+      echo '</pre>';
     }
   }
-
-?>
+  
+  ?>

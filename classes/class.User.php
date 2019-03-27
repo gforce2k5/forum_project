@@ -13,6 +13,25 @@
       $this->last_name = $last_name;
       $this->email = $email;
     }
+
+    function add_to_db($link) {
+      $user = mysqli_real_escape_string($link, $this->username);
+      $email = mysqli_real_escape_string($link, $this->email);
+      $fname = mysqli_real_escape_string($link, $this->first_name);
+      $lname = mysqli_real_escape_string($link, $this->last_name);
+      // $sql = new SQL($link, "SELECT * FROM users WHERE username='$user' OR email='$email';");
+      // $sql = new SQL($link, "SELECT * FROM users WHERE username=$user OR email=$email;");
+      $sql = new SQL($link, "SELECT id FROM users WHERE username = '$user' OR email = '$email'");
+      if (!$sql->is_ok() || $sql->is_ok() && $sql->rows() >= 1) {
+        return null;
+      }
+
+      $hash = md5(rand());
+      $password = password_hash($this->password, PASSWORD_DEFAULT);
+
+      $sql = new SQL($link, "INSERT INTO users(username, first_name, last_name, password, email, hash)".
+        " VALUES ($user, $fname, $lname, $password, $email, $hash);");
+    }
   }
 
 ?>

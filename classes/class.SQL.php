@@ -6,6 +6,7 @@
     private $ok = false;
 
     function __construct($link, $q) {
+      echo "<h1>$q</h1>";
       $this->q = trim(strtolower($q));
       $this->sql = mysqli_query($link, mysqli_real_escape_string($link, $q));
       if (!$this->sql) echo mysqli_error($link);
@@ -28,5 +29,8 @@
       return strpos($this->q, 'select') === 0;
     }
 
+    function is_ok() {
+      return $this->ok;
+    }
   }
 ?>
