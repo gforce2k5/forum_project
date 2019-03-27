@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Mar 26, 2019 at 06:21 PM
--- Server version: 5.7.24
--- PHP Version: 7.2.14
+-- Host: localhost
+-- Generation Time: Mar 27, 2019 at 11:19 PM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,14 +28,12 @@ SET time_zone = "+00:00";
 -- Table structure for table `categories`
 --
 
-DROP TABLE IF EXISTS `categories`;
-CREATE TABLE IF NOT EXISTS `categories` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` tinytext NOT NULL,
+CREATE TABLE `categories` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` text NOT NULL,
   `cat_order` int(11) NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `active` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -43,16 +41,15 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Table structure for table `forums`
 --
 
-DROP TABLE IF EXISTS `forums`;
-CREATE TABLE IF NOT EXISTS `forums` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `topic` tinytext NOT NULL,
+CREATE TABLE `forums` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `topic` text NOT NULL,
+  `description` text NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cat_order` int(11) NOT NULL,
   `cat_id` int(10) UNSIGNED NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `active` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -60,13 +57,11 @@ CREATE TABLE IF NOT EXISTS `forums` (
 -- Table structure for table `forum_managers`
 --
 
-DROP TABLE IF EXISTS `forum_managers`;
-CREATE TABLE IF NOT EXISTS `forum_managers` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `forum_managers` (
+  `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
-  `forum_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `forum_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -74,20 +69,18 @@ CREATE TABLE IF NOT EXISTS `forum_managers` (
 -- Table structure for table `posts`
 --
 
-DROP TABLE IF EXISTS `posts`;
-CREATE TABLE IF NOT EXISTS `posts` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `title` tinytext NOT NULL,
-  `content` text NOT NULL,
+CREATE TABLE `posts` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` text NOT NULL,
+  `content` mediumtext NOT NULL,
   `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
   `post_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
-  `is_locked` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_locked` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -95,22 +88,83 @@ CREATE TABLE IF NOT EXISTS `posts` (
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
-  `first_name` tinytext NOT NULL,
-  `last_name` tinytext NOT NULL,
+  `username` tinytext NOT NULL,
+  `first_name` text NOT NULL,
+  `last_name` text NOT NULL,
   `password` varchar(64) NOT NULL,
   `avatar` blob NOT NULL,
   `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_entry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `is_admin` tinyint(1) NOT NULL,
-  `signature` text NOT NULL,
-  `email` tinytext NOT NULL,
+  `signature` mediumtext NOT NULL,
+  `email` text NOT NULL,
   `hash` varchar(64) DEFAULT NULL,
-  `is_verified` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_verified` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `forums`
+--
+ALTER TABLE `forums`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `forum_managers`
+--
+ALTER TABLE `forum_managers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `forums`
+--
+ALTER TABLE `forums`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `forum_managers`
+--
+ALTER TABLE `forum_managers`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

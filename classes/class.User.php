@@ -21,7 +21,7 @@
       $lname = mysqli_real_escape_string($link, $this->last_name);
       // $sql = new SQL($link, "SELECT * FROM users WHERE username='$user' OR email='$email';");
       // $sql = new SQL($link, "SELECT * FROM users WHERE username=$user OR email=$email;");
-      $sql = new SQL($link, "SELECT id FROM users WHERE username = '$user' OR email = '$email'");
+      $sql = new SQL($link, "SELECT `id` FROM users WHERE `username` = '$user' OR `email` = '$email'");
       if (!$sql->is_ok() || $sql->is_ok() && $sql->rows() >= 1) {
         return null;
       }
