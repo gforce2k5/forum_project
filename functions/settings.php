@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
   define ('SITE_ROOT', realpath(dirname(__FILE__)));
   require_once(SITE_ROOT."/../classes/class.Cookie.php");
   require_once(SITE_ROOT."/../classes/class.User.php");
@@ -22,4 +23,19 @@
       }
     }
   }
+=======
+  //require_once("classes/class.Cookie.php");
+  require_once("../classes/class.Post.php");
+
+
+  
+  $server = "localhost";
+  $user = "root";
+  $password = "";
+  $db = "forum_project";
+
+  $_DB = mysqli_connect($server, $user, $password, $db) or die(mysqli_error());
+
+
+>>>>>>> created Post + updated sql table + started db
 ?>

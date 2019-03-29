@@ -2,10 +2,17 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
+<<<<<<< HEAD
 -- Host: localhost
 -- Generation Time: Mar 27, 2019 at 11:19 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
+=======
+-- Host: 127.0.0.1:3306
+-- Generation Time: Mar 29, 2019 at 02:29 PM
+-- Server version: 5.7.24
+-- PHP Version: 7.2.14
+>>>>>>> created Post + updated sql table + started db
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -77,9 +84,14 @@ CREATE TABLE `posts` (
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
-  `post_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
+<<<<<<< HEAD
   `is_locked` tinyint(1) NOT NULL
+=======
+  `is_locked` tinyint(1) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+>>>>>>> created Post + updated sql table + started db
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
