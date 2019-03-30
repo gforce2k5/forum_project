@@ -5,7 +5,7 @@
 
   $errors = [];
 
-  if ($_POST['submit']) {
+  if (isset($_POST['Submit']) && $_POST['Submit']) {
     if (isset($_POST['username'])) {
       $username = test_input($_POST['username']);
       if (!preg_match('/^[A-Za-z0-9]{4,}$/', $username)) {

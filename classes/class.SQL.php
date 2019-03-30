@@ -6,9 +6,8 @@
     private $ok = false;
 
     function __construct($link, $q) {
-      echo "<h1>$q</h1>";
       $this->q = trim(strtolower($q));
-      $this->sql = mysqli_query($link, mysqli_real_escape_string($link, $q));
+      $this->sql = mysqli_query($link, $q);
       if (!$this->sql) echo mysqli_error($link);
       else $this->ok = true;
     }

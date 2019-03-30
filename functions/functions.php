@@ -18,4 +18,17 @@
 
     mail($email, $subject, $headers);
   }
+
+  function is_logged_in() {
+    if (isset($_SESSION['is_logged_in']) && isset($_SESSION['sessionid']) && isset($_SESSION['user'])) {
+      return $_SESSION['is_logged_in'] &&
+        password_verify($_SESSION['sessionid'], unserialize($_SESSION['user'])->get_session_id());
+    }
+    return false;
+  }
+
+  function password_is_hash($password) {
+    $nfo = password_get_info($password);
+    return $nfo['algo'] != 0;
+  }
 ?>
