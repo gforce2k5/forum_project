@@ -15,7 +15,7 @@
     }
 
     function set() {
-      return setcookie($this->name, $this->value, $this->expire);
+      return setcookie($this->name, $this->value, $this->expire, '/', 'localhost');
     }
 
     function change($value) {

@@ -22,7 +22,7 @@
   function is_logged_in() {
     if (isset($_SESSION['is_logged_in']) && isset($_SESSION['sessionid']) && isset($_SESSION['user'])) {
       return $_SESSION['is_logged_in'] &&
-        password_verify($_SESSION['sessionid'], unserialize($_SESSION['user'])->get_session_id());
+        password_verify(unserialize($_SESSION['user'])->get_session_id(false), $_SESSION['sessionid']);
     }
     return false;
   }
@@ -30,5 +30,11 @@
   function password_is_hash($password) {
     $nfo = password_get_info($password);
     return $nfo['algo'] != 0;
+  }
+
+  function print_array($arr) {
+    echo "<pre>";
+    print_r($arr);
+    echo "</pre>";
   }
 ?>
