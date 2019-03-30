@@ -57,11 +57,13 @@
     if (count($errors) === 0) {
       $user = new User($username, $password, $fname, $lname, $email);
       $user->add_to_db($link);
+      header("location: ../");
     } else {
       echo '<pre>';
       print_r($errors);
       print_r($_POST);
       echo '</pre>';
+      header("location: ../register.php");
     }
   }
   
