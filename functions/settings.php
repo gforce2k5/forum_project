@@ -2,6 +2,7 @@
   define ('SITE_ROOT', realpath(dirname(__FILE__)));
   require_once(SITE_ROOT."/../classes/class.Cookie.php");
   require_once(SITE_ROOT."/../classes/class.User.php");
+  require_once(SITE_ROOT."/../classes/class.Post.php");
   require_once(SITE_ROOT."/../classes/class.SQL.php");
   require_once(SITE_ROOT."/user_settings.php");
   require_once(SITE_ROOT."/functions.php");
@@ -21,5 +22,14 @@
         $user->login_session($link);
       }
     }
+  }
+
+  if (isset($_SESSION['errors'])) {
+    $errors = unserialize($_SESSION['errors']);
+    foreach ($errors as $error_title => $error_msg) {
+      include(SITE_ROOT."/../templates/error.php");
+    }
+
+    unset($_SESSION['errors']);
   }
 ?>

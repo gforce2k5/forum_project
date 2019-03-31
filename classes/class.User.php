@@ -123,8 +123,7 @@
       $sql = new SQL($link, "INSERT INTO users(username, first_name, last_name, password, email, hash)".
         " VALUES ('$user', '$fname', '$lname', '$password', '$email', '$hash');");
 
-      $sql = new SQL($link, "SELECT id FROM users WHERE username = {$this->username}");
-      $this->id = $sql->result()['id'];
+      $this->id = $sql->get_id();
     }
 
     function get_hashed_password() {

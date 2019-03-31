@@ -1,11 +1,4 @@
 <?php
-  function test_input($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-  }
-
   function add_error($error_name, $error_message, $error_array) {
     $error_array[$error_name] = $error_message;
     return $error_array;
@@ -16,7 +9,7 @@
     $subject = "Forum verification email";
     $headers = "From: guy@localhost";
 
-    mail($email, $subject, $headers);
+    mail($email, $subject, $msg, $headers);
   }
 
   function is_logged_in() {

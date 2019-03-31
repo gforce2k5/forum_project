@@ -5,78 +5,80 @@ class Post{
     private $content = null;
     private $authorId = null;
     private $forumId = null;
+    private $postId = null;
     private $isPinned = null;
     private $isLocked = null;
     private $isDeleted = false;
     
     private $_id = null;
     private $table = "posts";
-
    
-    function __construct($db, $tile, $content, $authorid, $forumId, $isPinned = 0, $isLocked = 0){
+    function __construct($db, $title, $content, $authorid, $forumId = null, $postId = null, $isPinned = 0, $isLocked = 0){
         //save values 
         $this->_DB = $db;
-        $this->title = $tile;
-        $this->content = $content;
-        $this->authorId = $authorid;
-        $this->forumId = $forumId;
+        $this->title = mysqli_real_escape_string($db, $title);
+        $this->content = mysqli_real_escape_string($db, $content);
+        $this->authorId = mysqli_real_escape_string($db, $authorid);
+        $this->forumId = mysqli_real_escape_string($db, $forumId);
+        $this->postId = myslqi_real_escape_string($db, $postId);
         $this->isPinned = $isPinned ? 1 : 0;
-        $this->isLocked = $isPinned ? 1 : 0; 
+        $this->isLocked = $isLocked ? 1 : 0; 
       
-        $sql = "INSERT INTO {$this->table} (title, content, author_id, forum_id, is_pinned, is_locked) 
-        VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', {$this->isPinned}, {$this->isLocked});";
+        $sql = new SQL($db, "INSERT INTO {$this->table} (title, content, author_id, forum_id, post_id, is_pinned, is_locked) 
+          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->post_id}', {$this->isPinned}, {$this->isLocked});");
 
-        $this->sendQuery($sql);
-
-        $this->_id = mysqli_insert_id($this->_DB);
+        if ($sql->ok()) {
+            $this->_id = $sql->get_id();
+        }
     }
 
     function deletePost(){
         //update value
         $this->isDeleted = 1; 
  
-        $sql = "UPDATE {$this->table} SET 
-        is_deleted = {$this->isDeleted}
-        WHERE id = {$this->_id};";
+        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET 
+            is_deleted = {$this->isDeleted}
+            WHERE id = {$this->_id};");
 
-        $this->sendQuery($sql);
+        return $sql->is_ok();
     }
 
-    function editPost($title = null, $content = null, $authorId = null, $forumId = null, $isPinned = null, $isLocked = null){
+    function editPost($title = null, $content = null, $authorId = null, $forumId = null, $postId = null, $isPinned = null, $isLocked = null){
         //update values
         $this->title = $title != null ? $title : $this->title;
         $this->content = $content != null ? $content : $this->content;
         $this->authorId = $authorId != null ? $authorId : $this->authorId;
         $this->forumId = $forumId != null ? $forumId : $this->forumId;
+        $this->postId = $postId != null ? $postId : $this->postId;
         $this->isPinned = $isPinned != null ? ($isPinned ? 1 : 0) : $this->isPinned;
         $this->isLocked = $isLocked != null ? ($isLocked ? 1 : 0) : $this->isLocked; 
         
-        $sql = "UPDATE {$this->table} SET title = {$this->title}, content = {$this->content}, author_id = {$this->authorId}, forum_id = {$this->forumId}, is_pinned = {$this->isPinned}, is_locked = {$this->isLocked}
-        WHERE id = {$this->_id};";
+        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET title = {$this->title}, content = {$this->content}, author_id = {$this->authorId}, forum_id = {$this->forumId}, is_pinned = {$this->isPinned}, is_locked = {$this->isLocked}
+        WHERE id = {$this->_id};");
 
-        $this->sendQuery($sql);
+        return $sql->is_ok();
     }
 
     function changePinnedPost($isPinned){
         //update values 
         $this->isPinned = $isPinned ? 1 : 0;
         
-        $sql = "UPDATE {$this->table} SET 
+        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET 
         is_pinned = {$this->isPinned}
-        WHERE id = {$this->_id};";
+        WHERE id = {$this->_id};");
 
-        $this->sendQuery($sql);
+        return $sql->is_ok();
     }
 
     function changeLockedPost($isLocked){
         //update values 
         $this->isLocked = $isLocked ? 1 : 0;
                 
-        $sql = "UPDATE {$this->table} SET 
+        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET 
         is_locked = {$this->isLocked}
-        WHERE id = {$this->_id};";
+        WHERE id = {$this->_id};");
 
-        $this->sendQuery($sql);
+        return $sql->is_ok();
     }
 
 
@@ -94,6 +96,18 @@ class Post{
         }else{
             echo "<br>".mysqli_error($this->_DB);
         }
+    }
+
+    function getTitle() {
+        return $this->title;
+    }
+
+    function getContent() {
+        return $this->content;
+    }
+
+    function getAuthorId() {
+        return $this->authorId;
     }
 
 }
