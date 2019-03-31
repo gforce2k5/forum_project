@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 27, 2019 at 11:19 PM
+-- Generation Time: Mar 31, 2019 at 06:16 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -77,21 +77,10 @@ CREATE TABLE `posts` (
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
-<<<<<<< HEAD
-  `topic_id` int(10) UNSIGNED DEFAULT NULL,
+  `post_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
   `is_locked` tinyint(1) NOT NULL,
-  'is_deleted' tinyint(1) NOT NULL,
-=======
-  `is_pinned` tinyint(1) NOT NULL,
-<<<<<<< HEAD
-  `is_locked` tinyint(1) NOT NULL
-=======
-  `is_locked` tinyint(1) NOT NULL,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
->>>>>>> created Post + updated sql table + started db
->>>>>>> 02d22d1d422466be6f0e70e4867434d14fc67183
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -105,16 +94,23 @@ CREATE TABLE `users` (
   `username` tinytext NOT NULL,
   `first_name` text NOT NULL,
   `last_name` text NOT NULL,
-  `password` varchar(64) NOT NULL,
+  `password` char(60) NOT NULL,
   `avatar` blob NOT NULL,
   `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_entry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `is_admin` tinyint(1) NOT NULL,
   `signature` mediumtext NOT NULL,
   `email` text NOT NULL,
   `hash` varchar(64) DEFAULT NULL,
-  `is_verified` tinyint(1) NOT NULL
+  `status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `password`, `avatar`, `register_date`, `last_entry`, `signature`, `email`, `hash`, `status`) VALUES
+(1, 'guyev', 'Guy', 'Even', '$2y$10$7eRwOMqD8D0S.3DHaXfD.eB7CL9m/Wl76xe6awF0fy/yK6FTT0vum', '', '2019-03-29 15:06:50', '2019-03-30 14:30:37', '', 'gforce2k5@gmail.com', NULL, 2),
+(2, 'galia', 'Galia', 'Appel', '$2y$10$uzMk4E/JwHHZVH2HZ.P2Z.NFYbBgnZtUYs7Ojmyu/mmd9hLp29uwK', '', '2019-03-31 16:12:26', '2019-03-31 15:15:56', '', 'galia@gmail.com', '9ccc2f2b8790986e8fb5323c9e340c17', 0);
 
 --
 -- Indexes for dumped tables
@@ -177,6 +173,12 @@ ALTER TABLE `forum_managers`
 --
 ALTER TABLE `posts`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

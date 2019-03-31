@@ -59,10 +59,7 @@
       $user->add_to_db($link);
       header("location: ../");
     } else {
-      echo '<pre>';
-      print_r($errors);
-      print_r($_POST);
-      echo '</pre>';
+      $_SESSION['errors'] = serialize($errors);
       header("location: ../register.php");
     }
   }
