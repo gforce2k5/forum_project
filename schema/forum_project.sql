@@ -77,10 +77,21 @@ CREATE TABLE `posts` (
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
+<<<<<<< HEAD
   `topic_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
   `is_locked` tinyint(1) NOT NULL,
   'is_deleted' tinyint(1) NOT NULL,
+=======
+  `is_pinned` tinyint(1) NOT NULL,
+<<<<<<< HEAD
+  `is_locked` tinyint(1) NOT NULL
+=======
+  `is_locked` tinyint(1) NOT NULL,
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+>>>>>>> created Post + updated sql table + started db
+>>>>>>> 02d22d1d422466be6f0e70e4867434d14fc67183
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
