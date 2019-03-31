@@ -5,6 +5,6 @@
   <input type="email" name="email" placeholder="email">
   <input type="password" name="password" placeholder="password">
   <input type="password" name="confirmpwd" placeholder="once more">
-  <input type="checkbox" name="divur">
+  <input type="checkbox" checked required name="divur">
   <input type="submit" name="Submit">
 </form>
