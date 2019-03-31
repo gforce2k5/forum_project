@@ -77,9 +77,10 @@ CREATE TABLE `posts` (
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
-  `post_id` int(10) UNSIGNED DEFAULT NULL,
+  `topic_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
-  `is_locked` tinyint(1) NOT NULL
+  `is_locked` tinyint(1) NOT NULL,
+  'is_deleted' tinyint(1) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

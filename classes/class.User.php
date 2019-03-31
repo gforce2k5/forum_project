@@ -11,7 +11,7 @@
     private $last_entry = null;
     private $is_admin = false;
     private $signature = '';
-    private $is_verified = false;
+    private $status = false;
 
     static function pull_from_db($link, $param, $is_id = false) {
       $param = mysqli_real_escape_string($link, $param);
@@ -30,14 +30,14 @@
         $last_entry = $result['last_entry'];
         $is_admin = $result['is_admin'];
         $signature = $result['signature'];
-        $is_verified = $result['is_verified'];
+        $status = $result['status'];
         return new User($username, $password, $first_name, $last_name, $email, $id, $avatar, $register_date,
-          $last_entry, $is_admin, $signature, $is_verified);
+          $last_entry, $is_admin, $signature, $status);
       }
     }
 
     function __construct($username, $password, $first_name, $last_name, $email, $id = null,
-      $avatar = null, $register_date = null, $last_entry = null, $is_admin = false, $signature = '', $is_verified = false) {
+      $avatar = null, $register_date = null, $last_entry = null, $is_admin = false, $signature = '', $status = false) {
       $this->username = $username;
       $this->password = $password;
       $this->first_name = $first_name;
@@ -49,7 +49,7 @@
       if ($last_entry) $this->last_entry = $last_entry;
       if ($is_admin) $this->is_admin = $is_admin;
       if ($signature) $this->signature = $signature;
-      if ($is_verified) $this->is_verified = false;
+      if ($status) $this->status = false;
     }
 
     function get_username() {
@@ -88,8 +88,8 @@
       return $this->signature;
     }
 
-    function is_verified() {
-      return $this->is_verified;
+    function status() {
+      return $this->status;
     }
 
     function get_session_id($encript = true) {
@@ -116,7 +116,7 @@
         return null;
       }
 
-      $password = password_hash($this->password, PASSWORD_DEFAULT);
+      $password = password_hash($this->password, PASSWORD_BCRYPT);
 
       $hash = md5(rand());
 
