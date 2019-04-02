@@ -7,6 +7,7 @@
     private $ok = false;
 
     function __construct($link, $q) {
+      mysqli_query($link, "SET NAMES utf8");
       $this->q = trim(strtolower($q));
       $this->sql = mysqli_query($link, $q);
       if (!$this->sql) echo mysqli_error($link);

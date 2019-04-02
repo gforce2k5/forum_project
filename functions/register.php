@@ -39,13 +39,13 @@
     }
 
     if (isset($_POST['first_name']) && strlen($_POST['first_name']) > 0) {
-      $fname = test_input($_POST['first_name']);
+      $fname = $_POST['first_name'];
     } else {
       $errors = add_error('fname', 'לא הוכנס שם פרטי', $errors);
     }
 
     if (isset($_POST['last_name']) && strlen($_POST['last_name']) > 0) {
-      $lname = test_input($_POST['last_name']);
+      $lname = $_POST['last_name'];
     } else {
       $errors = add_error('lname', 'לא הוכנס שם משפחה', $errors);
     }
@@ -56,7 +56,12 @@
 
     if (count($errors) === 0) {
       $user = new User($username, $password, $fname, $lname, $email);
-      $user->add_to_db($link);
+      if (!$user->add_to_db($link)) {
+        $errors = add_error('username', 'שם המשתמש שבחרת צפוס', $errors);
+        $_SESSION['errors'] = serialize($errors);
+      } else {
+        $_SESSION['success'] = 'הרישום התבצע כהלכה';
+      };
       header("location: ../");
     } else {
       $_SESSION['errors'] = serialize($errors);

@@ -30,4 +30,26 @@
     print_r($arr);
     echo "</pre>";
   }
+
+  function display_alerts() {
+    if (isset($_SESSION['errors'])) {
+      $errors = unserialize($_SESSION['errors']);
+      $alert_type = 'danger';
+      foreach ($errors as $error => $error_msg) {
+        include SITE_ROOT."/../templates/alert.php";
+      }
+      unset($_SESSION['errors']);
+    }
+
+    if (isset($_SESSION['success'])) {
+      $alert_type = 'success';
+      $error_msg = $_SESSION['success'];
+      include SITE_ROOT."/../templates/alert.php";
+      unset($_SESSION['success']);
+    }
+  }
+
+  function sql_time($time) {
+    return date('Y-m-d H:i:s', $time);
+  }
 ?>

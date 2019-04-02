@@ -9,7 +9,6 @@
     private $avatar = null;
     private $register_date = null;
     private $last_entry = null;
-    private $is_admin = false;
     private $signature = '';
     private $status = false;
 
@@ -28,16 +27,15 @@
         $avatar = $result['avatar'];
         $register_date = $result['register_date'];
         $last_entry = $result['last_entry'];
-        $is_admin = $result['is_admin'];
         $signature = $result['signature'];
         $status = $result['status'];
         return new User($username, $password, $first_name, $last_name, $email, $id, $avatar, $register_date,
-          $last_entry, $is_admin, $signature, $status);
+          $last_entry, $signature, $status);
       }
     }
 
     function __construct($username, $password, $first_name, $last_name, $email, $id = null,
-      $avatar = null, $register_date = null, $last_entry = null, $is_admin = false, $signature = '', $status = false) {
+      $avatar = null, $register_date = null, $last_entry = null, $signature = '', $status = 0) {
       $this->username = $username;
       $this->password = $password;
       $this->first_name = $first_name;
@@ -47,25 +45,51 @@
       if ($avatar) $this->avatar = $avatar;
       if ($register_date) $this->register_date = $register_date;
       if ($last_entry) $this->last_entry = $last_entry;
-      if ($is_admin) $this->is_admin = $is_admin;
       if ($signature) $this->signature = $signature;
-      if ($status) $this->status = false;
+      if ($status) $this->status = $status;
+    }
+
+    function set_username($value) {
+      $this->username = $value;
     }
 
     function get_username() {
       return $this->username;
     }
 
+    function set_password($value) {
+      if (!password_is_hash($value)) {
+        $value = password_hash($value, PASSWORD_BCRYPT);
+      }
+      $this->password = $value;
+    }
+
+    function set_first_name($value) {
+      $this->first_name = $value;
+    }
+
     function get_first_name() {
       return $this->first_name;
+    }
+
+    function set_last_name($value) {
+      $this->last_name = $value;
     }
 
     function get_last_name() {
       return $this->last_name;
     }
 
+    function email($value) {
+      $this->email = $value;
+    }
+
     function get_email() {
       return $this->email;
+    }
+
+    function set_avatar($value) {
+      $this->avatar = $value;
     }
 
     function get_avatar() {
@@ -80,16 +104,20 @@
       return $this->last_entry;
     }
 
-    function is_adnin() {
-      return $this->is_admin;
-    }
-
     function get_signature() {
       return $this->signature;
     }
 
-    function status() {
+    function set_signature($value) {
+      $this->signature = $value;
+    }
+
+    function get_status() {
       return $this->status;
+    }
+
+    function set_status($value) {
+      $this->status = $value;
     }
 
     function get_session_id($encript = true) {
@@ -97,10 +125,10 @@
       if (password_is_hash($this->password)) {
         $res = $this->id.$this->password;
       } else {
-        $res = $this->id.password_hash($this->password, PASSWORD_DEFAULT);
+        $res = $this->id.password_hash($this->password, PASSWORD_BCRYPT);
       }
       if ($encript) {
-        return password_hash($res, PASSWORD_DEFAULT);
+        return password_hash($res, PASSWORD_BCRYPT);
       }
 
       return $res;
@@ -113,17 +141,38 @@
       $lname = mysqli_real_escape_string($link, $this->last_name);
       $sql = new SQL($link, "SELECT id FROM users WHERE username = '$user' OR email = '$email'");
       if (!$sql->is_ok() || $sql->is_ok() && $sql->rows() >= 1) {
-        return null;
+        return false;
       }
 
       $password = password_hash($this->password, PASSWORD_BCRYPT);
 
-      $hash = md5(rand());
+      $hash = sha1(md5(random_int(PHP_INT_MIN, PHP_INT_MAX)));
 
       $sql = new SQL($link, "INSERT INTO users(username, first_name, last_name, password, email, hash)".
         " VALUES ('$user', '$fname', '$lname', '$password', '$email', '$hash');");
 
+      if (!$sql->is_ok()) {
+        return false;
+      }
+
       $this->id = $sql->get_id();
+      return true;
+    }
+
+    function edit_user_db($link) {
+      $user = mysqli_real_escape_string($link, $this->username);
+      $email = mysqli_real_escape_string($link, $this->email);
+      $fname = mysqli_real_escape_string($link, $this->first_name);
+      $lname = mysqli_real_escape_string($link, $this->last_name);
+      $password = $this->password;
+      $avatar = $this->avatar;
+      $status = $this->status;
+      $signature = mysqli_real_escape_string($link, $this->signature);
+
+      $sql = new SQL($link, "UPDATE users (username, password, first_name, last_name, email, avatar, status, signature)
+        VALUES ('$user', '$password', '$fname', '$lname', '$email', '$avatar', '$status', '$signature')");
+
+      return $sql->is_ok();
     }
 
     function get_hashed_password() {
@@ -143,7 +192,7 @@
 
     function update_last_entry($link) {
       if ($this->id) {
-        new SQL($link, "UPDATE users SET last_entry = '".date('Y-m-d H:i:s', time())."' WHERE id = '$this->id'");
+        new SQL($link, "UPDATE users SET last_entry = '".sql_time(time())."' WHERE id = '$this->id'");
       }
     }
   }

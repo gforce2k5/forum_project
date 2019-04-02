@@ -1,6 +1,8 @@
 <?php
   require_once("settings.php");
 
+  $errors = [];
+
   if (is_logged_in()) header("location: ../");
 
   $username = $password = "";
@@ -21,12 +23,17 @@
           $password_cookie->set();
         }
         $user->login_session($link);
+        $_SESSION['success'] = "שלום {$user->get_first_name()} התחברת בהצלחה למערכת";
       } else {
-        echo "Bad username or password";
+        $errors = add_error('login', 'שם משתמש או סיסמא לא נכונים', $errors);
       }
     } else {
-      echo "Bad username or password";
+      $errors = add_error('login', 'שם משתמש או סיסמא לא נכונים', $errors);
     }
+  }
+
+  if (count($errors) > 0 ) {
+    $_SESSION['errors'] = serialize($errors);
   }
 
   header("location: ../");

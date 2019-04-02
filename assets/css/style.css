@@ -3,7 +3,7 @@ body{
     direction: rtl;
 }
 .headerPic{
-    background-image: url("assets/css/imgs/backgroundHeader.jpg");
+    background-image: url("../imgs/backgroundHeader.jpg");
     background-size: cover;
     width: 100%;
 }
