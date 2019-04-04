@@ -52,16 +52,18 @@
             return false;
           }
           $topic_count = $sql->result()['cnt'];
-          $sql = new SQL($link, "SELECT count(id) AS cnt FROM posts WHERE post_id = 
-            (SELECT id FROM posts WHERE forum_id = $this->id)");
+          $sql = new SQL($link, "SELECT count(p1.id) AS cnt FROM posts AS p1 JOIN posts AS p2 ON p1.post_id = p2.id AND   p2.forum_id = {$forum['id']}");
           if (!$sql->is_ok()) {
             return false;
           }
           $post_count = $sql->result()['cnt'];
 
-          $sql = new SQL($link, "SELECT username FROM users WHERE id =
-            (SELECT author_id FROM posts WHERE creation_time = 
-              (SELECT max(creation_time) FROM posts WHERE forum_id = '$this->id'))");
+          $sql = new SQL($link, "SELECT GREATEST(max(p1.edit_time), max(p2.edit_time)) AS time FROM posts AS p1 JOIN posts AS p2 ON p2.post_id = p1.id AND p1.forum_id = {$forum['id']};");
+          if (!$sql->is_ok()) return false;
+
+          $last_post_time = $sql->result()['time'];
+          
+          $sql = new SQL($link, "SELECT username FROM users WHERE id = (SELECT author_id FROM posts WHERE edit_time = '$last_post_time')");
 
           if (!$sql->is_ok()) {
             return false;
@@ -81,8 +83,16 @@
       return $this->name;
     }
 
+    function set_name($value) {
+      $this->name = $value;
+    }
+
     function get_cat_order() {
       return $this->cat_order;
+    }
+
+    function set_cat_order($value) {
+      $this->cat_order = $value;
     }
 
     function is_active() {

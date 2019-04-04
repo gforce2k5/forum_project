@@ -13,26 +13,39 @@ class Post{
     
     private $_id = null;
     private $table = "posts";
+
+    static function from_sql($db, $result) {
+        return new Post($db, $result['title'], $result['content'], $result['author_id'], $result['creation_time'], $result['edit_time'], $result['forum_id'], $result['post_id'], $result['is_pinned'], $result['is_locked'], $result['id']);
+    }
+
+    static function from_id($db, $id) {
+        $sql = new SQL($db, "SELECT * FROM posts WHERE id = $id");
+        if ($sql->is_ok()) {
+            return Post::from_sql($db, $sql->result());
+        }
+        return null;
+    }
    
-    function __construct($db, $title, $content, $authorid, $creationTime = null, $editTime = null, $forumId = null, $postId = null, $isPinned = 0, $isLocked = 0) {
+    function __construct($db, $title, $content, $authorid, $creationTime = null, $editTime = null, $forumId = null, $postId = null, $isPinned = 0, $isLocked = 0, $id = null) {
         //save values 
         $this->_DB = $db;
         $this->title = mysqli_real_escape_string($db, $title);
         $this->content = mysqli_real_escape_string($db, $content);
         $this->authorId = mysqli_real_escape_string($db, $authorid);
         $this->forumId = mysqli_real_escape_string($db, $forumId);
-        $this->postId = myslqi_real_escape_string($db, $postId);
+        $this->postId = mysqli_real_escape_string($db, $postId);
         $this->isPinned = $isPinned ? 1 : 0;
         $this->isLocked = $isLocked ? 1 : 0; 
         $this->creationTime = $creationTime;
         $this->editTime = $editTime;
+        $this->_id = $id;
     }
     
     function addToDb() {
         $sql = new SQL($this->_DB, "INSERT INTO {$this->table} (title, content, author_id, forum_id, post_id, is_pinned, is_locked) 
-          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->post_id}', {$this->isPinned}, {$this->isLocked});");
+          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->postId}', {$this->isPinned}, {$this->isLocked});");
 
-        if ($sql->ok()) {
+        if ($sql->is_ok()) {
             $this->_id = $sql->get_id();
             return true;
         }
@@ -58,6 +71,23 @@ class Post{
         WHERE id = {$this->_id};");
 
         return $sql->is_ok();
+    }
+
+    function showPosts() {
+        $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id");
+        if (!$posts_sql->is_ok()) return false;
+        while ($post = $posts_sql->result()) {
+            $post = Post::from_sql($this->_DB, $post);
+        $sql = new SQL($this->_DB, "SELECT username FROM users WHERE id = {$post->getAuthorId()}");
+            if (!$sql->is_ok()) return false;
+            $author = $sql->result()['username'];
+            $is_topic = false;
+            include "templates/post.php";
+        }
+    }
+
+    function getId() {
+        return $this->_id;
     }
 
     function getTitle() {

@@ -18,7 +18,7 @@
         <div class="myContainer">
           <div class="headerPic"></div>
             <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="./">
                     <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30"
                         class="d-inline-block align-top" alt="">
                     Bootstrap
@@ -33,12 +33,27 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="./">Home <span class="sr-only">(current)</span></a>
                         </li>
+                        <?php
+                            if (!is_logged_in()) {
+                        ?>
                         <li class="nav-item">
                             <a class="nav-link" href="register.php">Register</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Disabled</a>
-                        </li>
+                        <?php
+                            }
+                        ?>
+                        <?php
+                            if (is_logged_in()) {
+                                $user = unserialize($_SESSION['user']);
+                                if ($user->get_status() == 2) {
+                        ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="create_forum.php">Create Forum</a>
+                                    </li>
+                        <?php
+                                }
+                            }
+                        ?>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -8,6 +8,14 @@
     private $cat_id = null;
     private $active = true;
 
+    static function from_id($link, $id) {
+      $sql = new SQL($link, "SELECT * FROM forums WHERE id = $id");
+      if ($sql->is_ok() && $sql->rows() == 1) {
+        $res = $sql->result();
+        return new Forum($res['name'], $res['description'], $res['cat_id'], $res['id'], $res['create_date'], $res['cat_order'], $res['active']);
+      }
+    }
+
     function __construct($name, $description, $cat_id, $id = null, $create_date = null, $cat_order = '', $active = true) {
       $this->name = $name;
       $this->description = $description;
@@ -88,16 +96,25 @@
     }
 
     function show_posts($link, $pinned = false) {
-      $sql = new SQL($link, "SELECT * FROM posts WHERE forum_id = '$this->id' AND is_pinned = '".($pinned ? 1: 0)."'");
-      if (!$sql->ok) return false;
-      while ($topic = $sql->result()) {
-        $sql = new SQL($link, "SELECT count(id) as cnt FROM posts WHERE post_id = {$topic['id']}");
-        if (!$sql->ok) return false;
+      $forum_sql = new SQL($link, "SELECT * FROM posts WHERE forum_id = '$this->id' AND is_pinned = '".($pinned ? 1: 0)."'");
+      if (!$forum_sql->is_ok()) return false;
+      while ($topic = $forum_sql->result()) {
+        $topic = Post::from_sql($link, $topic);
+        $sql = new SQL($link, "SELECT username FROM users WHERE id = ".$topic->getAuthorId());
+        if (!$sql->is_ok()) return false;
+        $author = $sql->result()['username'];
+        $sql = new SQL($link, "SELECT count(id) as cnt FROM posts WHERE post_id = ".$topic->getId());
+        if (!$sql->is_ok()) return false;
         $post_count = $sql->result()['cnt'];
-        $sql = new SQL($link, "SELECT username FROM users WHERE id = (SELECT author_id FROM posts WHERE post_id = '{$topic['id']}' AND creation_date = (SELECT max(creation_date) FROM posts WHERE post_id))");
-        if (!$sql->ok) return false;
-        $last_username = $sql->result()['username'];
-        // include topic cube;
+        $sql = new SQL($link, "SELECT max(creation_time) as last_reply FROM posts WHERE post_id = {$topic->getId()}");
+        if (!$sql->is_ok()) return false;
+        $last_reply_time = $sql->result()['last_reply'];
+        if ($last_reply_time) {
+          $sql = new SQL($link, "SELECT username FROM users WHERE id = (SELECT author_id FROM posts WHERE post_id = '{$topic->getId()}' AND creation_time = '$last_reply_time')");
+          if (!$sql->is_ok()) return false;
+          $last_username = $sql->result()['username'];
+        }
+        include(SITE_ROOT."/../templates/topic_cube.php");
       }
     }
   }
