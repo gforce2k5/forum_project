@@ -10,7 +10,6 @@ class Post{
     private $postId = null;
     private $isPinned = null;
     private $isLocked = null;
-    private $isDeleted = false;
     
     private $_id = null;
     private $table = "posts";
@@ -35,29 +34,25 @@ class Post{
 
         if ($sql->ok()) {
             $this->_id = $sql->get_id();
+            return true;
         }
+        return false;
     }
 
     function deletePost(){
         //update value
-        $this->isDeleted = 1; 
- 
-        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET 
-            is_deleted = {$this->isDeleted}
-            WHERE id = {$this->_id};");
 
-        return $sql->is_ok();
+        $sql = new SQL($this->_DB, "DELETE FROM posts WHERE id = $this->id LIMIT 1");
+        if ($sql->is_ok()) {
+            $sql = new SQL($this->_DB, "DELETE FROM posts WHERE post_id = $this->id");
+            return $sql->is_ok();
+        }
+
+        return false;
     }
 
-    function editPost($title = null, $content = null, $authorId = null, $forumId = null, $postId = null, $isPinned = null, $isLocked = null){
+    function editDB(){
         //update values
-        $this->title = $title != null ? $title : $this->title;
-        $this->content = $content != null ? $content : $this->content;
-        $this->authorId = $authorId != null ? $authorId : $this->authorId;
-        $this->forumId = $forumId != null ? $forumId : $this->forumId;
-        $this->postId = $postId != null ? $postId : $this->postId;
-        $this->isPinned = $isPinned != null ? ($isPinned ? 1 : 0) : $this->isPinned;
-        $this->isLocked = $isLocked != null ? ($isLocked ? 1 : 0) : $this->isLocked; 
         
         $sql = new SQL($this->_DB, "UPDATE {$this->table} SET title = {$this->title}, content = {$this->content}, author_id = {$this->authorId}, forum_id = {$this->forumId}, is_pinned = {$this->isPinned}, is_locked = {$this->isLocked}, edit_time = {sql_time(time())}
         WHERE id = {$this->_id};");
@@ -65,50 +60,20 @@ class Post{
         return $sql->is_ok();
     }
 
-    function changePinnedPost($isPinned){
-        //update values 
-        $this->isPinned = $isPinned ? 1 : 0;
-        
-        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET 
-        is_pinned = {$this->isPinned}
-        WHERE id = {$this->_id};");
-
-        return $sql->is_ok();
-    }
-
-    function changeLockedPost($isLocked){
-        //update values 
-        $this->isLocked = $isLocked ? 1 : 0;
-                
-        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET is_locked = {$this->isLocked}
-            WHERE id = {$this->_id};");
-
-        return $sql->is_ok();
-    }
-
-
-    // function sendQuery($query){
-        
-    //     //this is here for debugging
-    //     // echo "<pre>";
-    //     // print_r($this->_DB);
-    //     // echo "</pre>";
-    //     // echo "</br> insertet query is : " .$query ."</br>";
-    //     //echo "</br>".mysqli_real_escape_string ($this->_DB, $query);
-
-    //     if (mysqli_query($this->_DB, $query)) {
-    //         echo "YAY";
-    //     }else{
-    //         echo "<br>".mysqli_error($this->_DB);
-    //     }
-    // }
-
     function getTitle() {
         return $this->title;
     }
 
+    function setTitle($value) {
+        $this->title = $value;
+    }
+
     function getContent() {
         return $this->content;
+    }
+
+    function setContent($value) {
+        $this->content = $value;
     }
 
     function getCreationTime() {
@@ -127,6 +92,10 @@ class Post{
         return $this->forumId;
     }
 
+    function setForumId($value) {
+        $this->forumId = $value;
+    }
+
     function getPostId() {
         return $this->postId;
     }
@@ -135,12 +104,24 @@ class Post{
         return $this->isPinned;
     }
 
+    function pinPost() {
+        $this->isPinned = true;
+    }
+
+    function unpinPost() {
+        $this->isPinned = false;
+    }
+
     function isLocked() {
         return $this->isLocked;
     }
 
-    function isDeleted() {
-        return $this->isDeleted;
+    function lockPost() {
+        $this->isLocked = true;
+    }
+
+    function unlockPost() {
+        $this->isLocked = false;
     }
 }
 ?>

@@ -4,6 +4,7 @@
   require_once(SITE_ROOT."/../classes/class.User.php");
   require_once(SITE_ROOT."/../classes/class.Post.php");
   require_once(SITE_ROOT."/../classes/class.Category.php");
+  require_once(SITE_ROOT."/../classes/class.Forum.php");
   require_once(SITE_ROOT."/../classes/class.SQL.php");
   require_once(SITE_ROOT."/user_settings.php");
   require_once(SITE_ROOT."/functions.php");

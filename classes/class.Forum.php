@@ -24,9 +24,14 @@
       $cat_id = mysqli_real_escape_string($link, $this->cat_id);
       $cat_order = mysqli_real_escape_string($link, $this->cat_order);
       $active = mysqli_real_escape_string($link, $this->active);
+
+      $sql = new SQL($link, "SELECT id FROM forums WHERE name = '$name'");
+
+      if ($sql->is_ok() && $sql->rows() >= 1) return false;
+
       $sql = new SQL($link, "INSERT INTO forums SET name = '$name', description = '$description', cat_id = '$cat_id', cat_order = '$cat_order', active = '$active'");
 
-      if (!$sql->ok()) {
+      if (!$sql->is_ok()) {
         return false;
       }
 

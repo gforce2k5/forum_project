@@ -34,6 +34,20 @@
       }
     }
 
+    static function get_active_users($link) {
+      $sql = new SQL($link, "SELECT id, username FROM users WHERE status >= 1");
+      
+      if (!$sql->is_ok()) return false;
+
+      $html = '';
+
+      while ($user = $sql->result()) {
+        $html .= '<option value="'.$user['id'].'">'.sanitize_input($user['username']).'</option>';
+      }
+
+      return $html;
+    }
+
     function __construct($username, $password, $first_name, $last_name, $email, $id = null,
       $avatar = null, $register_date = null, $last_entry = null, $signature = '', $status = 0) {
       $this->username = $username;
@@ -116,8 +130,16 @@
       return $this->status;
     }
 
-    function set_status($value) {
-      $this->status = $value;
+    function unlock_user() {
+      $this->status = 1;
+    }
+
+    function make_admin() {
+      $this->status = 2;
+    }
+
+    function lock_user() {
+      $this->status = 0;
     }
 
     function get_session_id($encript = true) {

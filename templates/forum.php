@@ -1,0 +1,1 @@
+<h3><a href="view_forum.php/f=<?= $forum['id'] ?>"><?= sanitize_input($forum['name']) ?></a></h3>

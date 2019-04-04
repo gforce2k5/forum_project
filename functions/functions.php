@@ -4,6 +4,10 @@
     return $error_array;
   }
 
+  function sanitize_input($string) {
+    return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+  }
+
   function send_verification_email($hash, $email) {
     $msg = "to verify your email click the following link.\nhttp://localhost/functions/verify.php?hash=$hash";
     $subject = "Forum verification email";

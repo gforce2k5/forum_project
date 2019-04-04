@@ -57,7 +57,7 @@
     if (count($errors) === 0) {
       $user = new User($username, $password, $fname, $lname, $email);
       if (!$user->add_to_db($link)) {
-        $errors = add_error('username', 'שם המשתמש שבחרת צפוס', $errors);
+        $errors = add_error('username', 'שם המשתמש שבחרת תפוס', $errors);
         $_SESSION['errors'] = serialize($errors);
       } else {
         $_SESSION['success'] = 'הרישום התבצע כהלכה';
