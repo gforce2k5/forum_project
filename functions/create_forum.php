@@ -1,8 +1,7 @@
 <?php
   require_once("settings.php");
   if (!is_logged_in()) header("location:../");
-  $user = unserialize($_SESSION['user']);
-  if (!$user->get_status() == 2) {
+  if (!$current_user->get_status() == 2) {
     $errors = add_error("create_forum", "אין לך הרשאה לביצוע פעולה זו", $errors);
     $_SESSION['errors'] = serialize($errors);
     header("location: ../");

@@ -39,8 +39,7 @@
     header("location: ../");
   }
 
-  $user = unserialize($_SESSION['user']);
-  $post = new Post($link, $title, $content, $user->get_id(), null, null, $parent == 'f' ? $parent_id : null, $parent == 'p' ? $parent_id : null);
+  $post = new Post($link, $title, $content, $current_user->get_id(), null, null, $parent == 'f' ? $parent_id : null, $parent == 'p' ? $parent_id : null);
 
   if (!$post->addToDb()) {
     $_SESSION['errors'] = serialize(add_error('sql', 'קרתה שגירה אנא נסה שוב', $errors));

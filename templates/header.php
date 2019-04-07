@@ -44,8 +44,7 @@
                         ?>
                         <?php
                             if (is_logged_in()) {
-                                $user = unserialize($_SESSION['user']);
-                                if ($user->get_status() == 2) {
+                                if ($current_user->get_status() == 2) {
                         ?>
                                     <li class="nav-item">
                                         <a class="nav-link" href="create_forum.php">Create Forum</a>

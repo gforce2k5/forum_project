@@ -10,12 +10,13 @@ class Post{
     private $postId = null;
     private $isPinned = null;
     private $isLocked = null;
+    private $lastActivity = null;
     
     private $_id = null;
     private $table = "posts";
 
     static function from_sql($db, $result) {
-        return new Post($db, $result['title'], $result['content'], $result['author_id'], $result['creation_time'], $result['edit_time'], $result['forum_id'], $result['post_id'], $result['is_pinned'], $result['is_locked'], $result['id']);
+        return new Post($db, $result['title'], $result['content'], $result['author_id'], $result['last_activity'], $result['creation_time'], $result['edit_time'], $result['forum_id'], $result['post_id'], $result['is_pinned'], $result['is_locked'], $result['id']);
     }
 
     static function from_id($db, $id) {
@@ -26,7 +27,7 @@ class Post{
         return null;
     }
    
-    function __construct($db, $title, $content, $authorid, $creationTime = null, $editTime = null, $forumId = null, $postId = null, $isPinned = 0, $isLocked = 0, $id = null) {
+    function __construct($db, $title, $content, $authorid, $lastActivity = null, $creationTime = null, $editTime = null, $forumId = null, $postId = null, $isPinned = 0, $isLocked = 0, $id = null) {
         //save values 
         $this->_DB = $db;
         $this->title = mysqli_real_escape_string($db, $title);
@@ -39,11 +40,12 @@ class Post{
         $this->creationTime = $creationTime;
         $this->editTime = $editTime;
         $this->_id = $id;
+        $this->lastActivity = null;
     }
     
     function addToDb() {
-        $sql = new SQL($this->_DB, "INSERT INTO {$this->table} (title, content, author_id, forum_id, post_id, is_pinned, is_locked) 
-          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->postId}', {$this->isPinned}, {$this->isLocked});");
+        $sql = new SQL($this->_DB, "INSERT INTO {$this->table} (title, content, author_id, forum_id, post_id, is_pinned, is_locked, last_activity) 
+          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->postId}', {$this->isPinned}, {$this->isLocked}, {($this->lastActivity ? sql_time($this->lastActivity) : null)});");
 
         if ($sql->is_ok()) {
             $this->_id = $sql->get_id();
@@ -73,17 +75,21 @@ class Post{
         return $sql->is_ok();
     }
 
-    function showPosts() {
-        $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id");
+    function showPosts($pinned = false) {
+        $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id AND is_pinned = ".($pinned ? 1 : 0));
         if (!$posts_sql->is_ok()) return false;
         while ($post = $posts_sql->result()) {
             $post = Post::from_sql($this->_DB, $post);
-        $sql = new SQL($this->_DB, "SELECT username FROM users WHERE id = {$post->getAuthorId()}");
+            $sql = new SQL($this->_DB, "SELECT username FROM users WHERE id = {$post->getAuthorId()}");
             if (!$sql->is_ok()) return false;
             $author = $sql->result()['username'];
             $is_topic = false;
             include "templates/post.php";
         }
+    }
+
+    private function post($posts_sql) {
+
     }
 
     function getId() {

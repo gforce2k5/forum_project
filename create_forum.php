@@ -4,8 +4,7 @@
   $error_msg = '';
   $errors = [];
   if (is_logged_in()) {
-    $user = unserialize($_SESSION['user']);
-    if ($user->get_status() == 2) {
+    if ($current_user->get_status() == 2) {
       $action = 'create';
       include("templates/forum_form.php");
     } else {

@@ -24,5 +24,7 @@
         $user->login_session($link);
       }
     }
+  } else {
+    $current_user = unserialize($_SESSION['user']);
   }
 ?>

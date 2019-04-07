@@ -5,6 +5,7 @@
   $sql = new SQL($link, "SELECT username FROM users WHERE id = {$topic->getAuthorId()}");
   $author = $sql->result()['username'];
   include "templates/post.php";
+  $post->showPosts(true);
   $post->showPosts();
   $action = 'create';
   $parent = 'p';
