@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 31, 2019 at 06:53 PM
+-- Generation Time: Apr 07, 2019 at 05:18 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -35,6 +35,15 @@ CREATE TABLE `categories` (
   `active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `cat_order`, `active`) VALUES
+(2, '333', 0, 1),
+(3, 'קטגוריה 2', 0, 1),
+(4, 'קטגוריה חדשה', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -43,13 +52,24 @@ CREATE TABLE `categories` (
 
 CREATE TABLE `forums` (
   `id` int(10) UNSIGNED NOT NULL,
-  `topic` text NOT NULL,
+  `name` text NOT NULL,
   `description` text NOT NULL,
   `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cat_order` int(11) NOT NULL,
   `cat_id` int(10) UNSIGNED NOT NULL,
   `active` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `forums`
+--
+
+INSERT INTO `forums` (`id`, `name`, `description`, `create_date`, `cat_order`, `cat_id`, `active`) VALUES
+(4, '1', '2', '2019-04-03 10:54:19', 0, 2, 1),
+(5, 'שלום', 'רב', '2019-04-03 12:42:20', 0, 2, 1),
+(6, 'test2', 'ggggg', '2019-04-03 15:49:15', 0, 3, 1),
+(7, 'פורום 3', 'ניסיון 3', '2019-04-03 15:53:28', 0, 4, 1),
+(8, '<script>alert(\'hi\');</script>', '<script>alert(\'hi\');</script>', '2019-04-03 18:27:26', 0, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -63,6 +83,17 @@ CREATE TABLE `forum_managers` (
   `forum_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `forum_managers`
+--
+
+INSERT INTO `forum_managers` (`id`, `user_id`, `forum_id`) VALUES
+(1, 3, 4),
+(2, 4, 5),
+(3, 1, 6),
+(4, 3, 7),
+(5, 1, 8);
+
 -- --------------------------------------------------------
 
 --
@@ -74,13 +105,13 @@ CREATE TABLE `posts` (
   `title` text NOT NULL,
   `content` mediumtext NOT NULL,
   `creation_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_activity` timestamp NULL DEFAULT NULL,
   `author_id` int(10) UNSIGNED NOT NULL,
   `edit_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `forum_id` int(10) UNSIGNED DEFAULT NULL,
   `post_id` int(10) UNSIGNED DEFAULT NULL,
   `is_pinned` tinyint(1) NOT NULL,
-  `is_locked` tinyint(1) NOT NULL,
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0'
+  `is_locked` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -109,8 +140,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `password`, `avatar`, `register_date`, `last_entry`, `signature`, `email`, `hash`, `status`) VALUES
-(1, 'guyev', 'Guy', 'Even', '$2y$10$7eRwOMqD8D0S.3DHaXfD.eB7CL9m/Wl76xe6awF0fy/yK6FTT0vum', '', '2019-03-29 15:06:50', '2019-03-30 14:30:37', '', 'gforce2k5@gmail.com', NULL, 2),
-(2, 'galia', 'Galia', 'Appel', '$2y$10$uzMk4E/JwHHZVH2HZ.P2Z.NFYbBgnZtUYs7Ojmyu/mmd9hLp29uwK', '', '2019-03-31 16:12:26', '2019-03-31 15:15:56', '', 'galia@gmail.com', '9ccc2f2b8790986e8fb5323c9e340c17', 0);
+(1, 'guyev', 'Guy', 'Even', '$2y$10$7eRwOMqD8D0S.3DHaXfD.eB7CL9m/Wl76xe6awF0fy/yK6FTT0vum', '', '2019-03-29 15:06:50', '2019-04-06 18:51:17', '', 'gforce2k5@gmail.com', NULL, 2),
+(2, 'galia', 'Galia', 'Appel', '$2y$10$uzMk4E/JwHHZVH2HZ.P2Z.NFYbBgnZtUYs7Ojmyu/mmd9hLp29uwK', '', '2019-03-31 16:12:26', '2019-04-04 14:34:42', '', 'galia@gmail.com', NULL, 1),
+(3, 'user', 'shlomi', 'tur', '$2y$10$bnOHS6TkkVJSxzNodTICJeY1.EXDaEg.MrEH0IYNV/sGQLzPnwxUS', '', '2019-03-31 17:30:04', '2019-03-31 16:30:21', '', 'sh@gmail.com', NULL, 1),
+(4, 'guy12', 'G', 'E', '$2y$10$Q78QVzGGmOjPAJ3qRmhwOuFdtUw3nYhAnXfgb40l.wnhBVdX0Ts.O', '', '2019-04-01 19:51:34', '2019-04-01 19:51:34', '', 'g@2.e3', NULL, 1),
+(5, 'shlomi', 'shlomi', 'tur', '$2y$10$G5WIOG2VMnIwvWozBkqtxu1Yczs3OlrqPsWSCuSMhnNwRdOIC1iGC', '', '2019-04-02 16:38:16', '2019-04-02 15:38:55', '', 'shlomi.tur@gmail.com', NULL, 1);
 
 --
 -- Indexes for dumped tables
@@ -154,31 +188,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `forums`
 --
 ALTER TABLE `forums`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `forum_managers`
 --
 ALTER TABLE `forum_managers`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
