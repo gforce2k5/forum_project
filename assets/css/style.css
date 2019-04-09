@@ -1,16 +1,15 @@
 body{
-    padding-top: 70px;
-    direction: rtl;
-}
-.headerPic{
-    background-image: url("../imgs/backgroundHeader.jpg");
-    background-size: cover;
-    width: 100%;
+  direction: rtl;
 }
 
 /* category tamplate */
-.categoryDiv{
-    background-color: rgb(36, 2, 68);
-    width: 80%;
-    color: white;
+.categoryDiv {
+  margin: 0 auto;
+  background-color: rgb(36, 2, 68);
+  width: 80%;
+  color: white;
+}
+
+label.error {
+  color: red;
 }

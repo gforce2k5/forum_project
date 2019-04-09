@@ -7,7 +7,7 @@
     <?= Category::show_category_list($link) ?>
     <option value="-1">אחר...</option>
   </select><br/>
-  <input name="other" id="other" placeholder="אחר" disabled><br/>
+  <input name="other" id="other" placeholder="אחר"><br/>
   <select name="manager">
     <option value=''>בחר מנהל</option>
     <?= User::get_active_users($link) ?>

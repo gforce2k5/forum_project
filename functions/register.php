@@ -22,11 +22,11 @@
         $errors = add_error('password', 'הסיסמאות שהוכנסו לא זהות', $errors);
       } else {
         if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/', $password)) {
-          $errors = add_error('password', 'הסיסמא חייבת להכיל לפחות אות גדולה, אות קטנה ומספר', $errors);
+          $errors = add_error('password', 'הסיסמא חייבת להכיל לפחות אות גדולה, אות קטנה ומספר. הסיסמה חייבת להכיל לפחות 6 תווים', $errors);
         }
       }
     } else {
-      $errors = add_error('password', 'אחת משדות הסיסמא ריקות', $errors);
+      $errors = add_error('password', 'אחת משדות הסיסמה ריקות', $errors);
     }
 
     if (isset($_POST['email']) && strlen($_POST['email']) > 0) {
@@ -38,14 +38,14 @@
       $errors = add_error('email', 'לא הוכנסה כתובת אימייל', $errors);
     }
 
-    if (isset($_POST['first_name']) && strlen($_POST['first_name']) > 0) {
-      $fname = $_POST['first_name'];
+    if (isset($_POST['first_name']) && strlen(trim($_POST['first_name'])) > 0) {
+      $fname = trim($_POST['first_name']);
     } else {
       $errors = add_error('fname', 'לא הוכנס שם פרטי', $errors);
     }
 
-    if (isset($_POST['last_name']) && strlen($_POST['last_name']) > 0) {
-      $lname = $_POST['last_name'];
+    if (isset($_POST['last_name']) && strlen(trim($_POST['last_name'])) > 0) {
+      $lname = trim($_POST['last_name']);
     } else {
       $errors = add_error('lname', 'לא הוכנס שם משפחה', $errors);
     }
@@ -65,8 +65,9 @@
       header("location: ../");
     } else {
       $_SESSION['errors'] = serialize($errors);
-      header("location: ../register.php");
+      header("location: ../");
     }
   }
+  // header("location: ../");
   
   ?>

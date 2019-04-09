@@ -10,7 +10,6 @@ class Post{
     private $postId = null;
     private $isPinned = null;
     private $isLocked = null;
-    private $lastActivity = null;
     
     private $_id = null;
     private $table = "posts";
@@ -44,8 +43,8 @@ class Post{
     }
     
     function addToDb() {
-        $sql = new SQL($this->_DB, "INSERT INTO {$this->table} (title, content, author_id, forum_id, post_id, is_pinned, is_locked, last_activity) 
-          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->postId}', {$this->isPinned}, {$this->isLocked}, {($this->lastActivity ? sql_time($this->lastActivity) : null)});");
+        $sql = new SQL($this->_DB, "INSERT INTO {$this->table} (title, content, author_id, forum_id, post_id, is_pinned, is_locked) 
+          VALUES ('{$this->title}','{$this->content}', '{$this->authorId}', '{$this->forumId}', '{$this->postId}', {$this->isPinned}, {$this->isLocked});");
 
         if ($sql->is_ok()) {
             $this->_id = $sql->get_id();
@@ -69,14 +68,13 @@ class Post{
     function editDB(){
         //update values
         
-        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET title = {$this->title}, content = {$this->content}, author_id = {$this->authorId}, forum_id = {$this->forumId}, is_pinned = {$this->isPinned}, is_locked = {$this->isLocked}, edit_time = {sql_time(time())}
-        WHERE id = {$this->_id};");
+        $sql = new SQL($this->_DB, "UPDATE {$this->table} SET title = '{$this->title}', content = '{$this->content}', author_id = {$this->authorId}, post_id = {$this->postId}, forum_id = {$this->forumId}, is_pinned = {$this->isPinned}, is_locked = {$this->isLocked}, edit_time = NOW() WHERE id = {$this->_id};");
 
         return $sql->is_ok();
     }
 
     function showPosts($pinned = false) {
-        $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id AND is_pinned = ".($pinned ? 1 : 0));
+        $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id AND is_pinned = ".($pinned ? 1 : 0)." ORDER BY last_activity");
         if (!$posts_sql->is_ok()) return false;
         while ($post = $posts_sql->result()) {
             $post = Post::from_sql($this->_DB, $post);
@@ -86,10 +84,6 @@ class Post{
             $is_topic = false;
             include "templates/post.php";
         }
-    }
-
-    private function post($posts_sql) {
-
     }
 
     function getId() {
@@ -158,6 +152,10 @@ class Post{
 
     function unlockPost() {
         $this->isLocked = false;
+    }
+
+    function updateActivity() {
+        $sql = new SQL($this->_DB, "UPDATE posts SET last_activity = NOW() WHERE id = $this->_id");
     }
 }
 ?>

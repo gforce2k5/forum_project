@@ -8,6 +8,5 @@
     $cat = Category::category_from_sql($cat);
     include "templates/category.php";
   }
-
   require_once("footer.php");
 ?>
