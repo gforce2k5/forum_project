@@ -12,10 +12,10 @@
   <title><?= $page_title; ?></title>
 </head>
 
-<body class="bg-light">
+<body class="bg-light" style="padding-top:70px;">
   <div class="wrapper">
     <div class="myContainer">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="./">
           פורום
         </a>
@@ -32,17 +32,12 @@
               if (is_logged_in()) {
                 if ($current_user->get_status() == 2) {
             ?>
-                  <li class="nav-item">
-                    <a class="nav-link" href="create_forum.php">צור פורום</a>
-                  </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       פנל ניהול
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
+                      <a class="dropdown-item" data-toggle="modal" data-target="#create-forum-modal">צור פורום</a>
                     </div>
                   </li>
             <?php
@@ -55,9 +50,14 @@
               } else {
             ?>
                 <li class="nav-item">
-                  <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#register-modal">
+                  <a href="#" class="nav-link" data-toggle="modal" data-target="#register-modal">
                     הרשמה
-                  </button>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link" data-toggle="modal" data-target="#login-modal">
+                    התחברות
+                  </a>
                 </li>
             <?php
               }
@@ -80,5 +80,9 @@
     if (!is_logged_in()) {
       include SITE_ROOT."/../templates/login.php";
       include SITE_ROOT."/../templates/register.php";
+    } elseif ($current_user->get_status() == 2) {
+      $action = 'create';
+      include SITE_ROOT."/../templates/forum_form.php";
     }
   ?>
+  <div class="container">

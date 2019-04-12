@@ -1,14 +1,13 @@
 // Category list select
 
-$('#other').hide();
+$('#create-forum-other').hide();
 
-$('#cat_id').change(e => {
-  if ($('#cat_id').val() == -1) {
-    console.log($('#cat_id').val());
-    $('#other').show();
+$('.cat_id').change(e => {
+  if ($(this).val() == -1) {
+    $('#create-forum-other').show();
   } else {
-    $('#other').hide();
-    $('#other').val('');
+    $('#create-forum-other').hide();
+    $('#create-forum-other').val('');
   }
 });
 
@@ -79,3 +78,21 @@ $('#register-reset').click(e => {
   resetForm('register-form');
   document.querySelector('#register-form').reset();
 });
+
+// login form
+
+$('#login-submit').click(e => {
+  $('#login-form').submit();
+})
+
+$('#login-reset').click(e => {
+  document.querySelector('#login-form').reset();
+})
+
+// create forum form validation
+
+resetForm('create-forum-form');
+
+$('#create-forum-submit').click(e => {
+  $('#create-forum-form').submit();
+})

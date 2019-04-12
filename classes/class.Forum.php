@@ -96,7 +96,7 @@
     }
 
     function show_posts($link, $pinned = false) {
-      $forum_sql = new SQL($link, "SELECT * FROM posts WHERE forum_id = '$this->id' AND is_pinned = '".($pinned ? 1: 0)."'");
+      $forum_sql = new SQL($link, "SELECT * FROM posts WHERE forum_id = '$this->id' AND is_pinned = '".($pinned ? 1: 0)."' ORDER BY last_activity DESC");
       if (!$forum_sql->is_ok()) return false;
       while ($topic = $forum_sql->result()) {
         $topic = Post::from_sql($link, $topic);

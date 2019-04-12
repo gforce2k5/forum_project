@@ -56,4 +56,8 @@
   function sql_time($time) {
     return date('Y-m-d H:i:s', $time);
   }
+
+  function format_time($time) {
+    return date('d-m-Y H:i:s', strtotime($time));
+  }
 ?>

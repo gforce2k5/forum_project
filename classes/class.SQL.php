@@ -8,11 +8,11 @@
 
     function __construct($link, $q) {
       mysqli_query($link, "SET NAMES utf8");
-      // echo "<h1>$q</h1>";
       $this->q = trim(strtolower($q));
       $this->sql = mysqli_query($link, $q);
       if (!$this->sql) {
-        echo mysqli_error($link);
+        $error = mysqli_error($link);
+        mysqli_query($link, "INSERT INTO queries (query, error) VALUES ('$q', '$error')");
       }
       else {
         $this->ok = true;

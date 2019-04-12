@@ -34,10 +34,21 @@
 
     if (isset($_POST['other'])) $cat_name = $_POST['other'];
 
-    if (isset($_POST['manager']) && is_numeric($_POST['manager'])) {
-      $manager_id = intval($_POST['manager']);
+    $managers = [];
+    $manager_ids = [];
+
+    if (isset($_POST['managers']) && is_array($_POST['managers'])) {
+      $managers = $_POST['managers'];
+      foreach($managers as $key => $value) {
+        if (is_numeric($value)) {
+          array_push($manager_ids, intval($value));
+        } else {
+          $errors = add_error('managers', 'נבחר מנהל לא חוקי', $errors);
+          break;
+        }
+      }
     } else {
-      $errors = add_error('manager', 'לא נבחר מנהל פורום', $errors);
+      $errors = add_error('managers', 'לא נבחר מנהל פורום', $errors);
     }
 
     if (count($errors) > 0) {
@@ -49,13 +60,18 @@
       if (strlen($cat_name) == 0) {
         $errors = add_error('אחר', 'שם הקטגוריה שבחרת להוסיף ריק', $errors);
         $_SESSION['errors'] = serialize($errors);
-        header("location: ../create_forum.php");
+        header("location: ../");
       }
       $category = new Category($cat_name);
       if (!$category->add_to_db($link)) {
         $errors = add_error('sql', 'הקטגוריה שהוספת כבר קיימת', $errors);
         $_SESSION['errors'] = serialize($errors);
-        header("location: ../create_forum.php");
+        $sql = new SQL($link, "SELECT * FROM categories WHERE name = $cat_name");
+        if ($sql->is_ok()) {
+          $category = Category::category_from_sql($sql->result());
+        } else {
+          header("location: ../");
+        }
       }
       $cat_id = $category->get_id();
     }
@@ -70,30 +86,33 @@
       header("location: ../create_forum.php");
     }
 
-    $sql = new SQL($link, "SELECT id FROM users WHERE id = '$manager_id' AND status >= 1");
-
-    if (!$sql->is_ok() || ($sql->is_ok() && $sql->rows() == 0)) {
-      $errors = add_error('sql', 'המשתמש שנבחר לא קיים או לא פעיל', $errors);
-      $_SESSION['errors'] = serialize($errors);
-      header("location: ../create_forum.php");
-    }
-
     $forum = new Forum($name, $description, $cat_id);
     if (!$forum->add_to_db($link)) {
       $errors = add_error('sql', 'פורום בעל שם זהה כבר קיים', $errors);
       $_SESSION['erros'] = serialize($errors);
-      header("location: ../create_forum.php");
+      header("location: ../");
     }
-
-    $manager_id = mysqli_real_escape_string($link, $manager_id);
+    
     $forum_id = $forum->get_id();
 
-    $sql = new SQL($link, "INSERT INTO forum_managers (user_id, forum_id) VALUES($manager_id, $forum_id)");
-
-    if (!$sql->is_ok()) {
-      $errors = add_error('sql', 'קרתה שגיאה בהוספת מנהל לפורום', $errors);
-      $_SESSION['erros'] = serialize($errors);
-      header("location: ../create_forum.php");
+    foreach($manager_ids as $key => $manager_id) {
+      $sql = new SQL($link, "SELECT id FROM users WHERE id = '$manager_id' AND status >= 1");
+  
+      if (!$sql->is_ok() || ($sql->is_ok() && $sql->rows() == 0)) {
+        $errors = add_error('sql', 'המשתמש שנבחר לא קיים או לא פעיל', $errors);
+        $_SESSION['errors'] = serialize($errors);
+        header("location: ../");
+      }
+  
+      $manager_id = mysqli_real_escape_string($link, $manager_id);
+  
+      $sql = new SQL($link, "INSERT INTO forum_managers (user_id, forum_id) VALUES($manager_id, $forum_id)");
+  
+      if (!$sql->is_ok()) {
+        $errors = add_error('sql', 'קרתה שגיאה בהוספת מנהל לפורום', $errors);
+        $_SESSION['erros'] = serialize($errors);
+        header("location: ../");
+      }
     }
 
     $_SESSION['success'] = 'הפורום נוסף בהצלחה';
