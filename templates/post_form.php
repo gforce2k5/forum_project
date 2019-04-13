@@ -19,7 +19,11 @@
           <div class="form-group">
             <label for="<?= $action ?>-form-content">תוכן הפוסט:</label>
             <label class="error" id="<?= $action ?>-post-content-error">* לא הוכנס תוכן</label>
-            <textarea class="form-control" id="<?= $action ?>-post-content" name="content" rows="3" required></textarea>
+            <textarea class="form-control bbcode" id="<?= $action ?>-post-content" name="content" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="<?= $action ?>-post-preview">תצוגה מקדימה</label>
+            <div class="bbcode-preview"></div>
           </div>
           <input type="hidden" name="Submit" value="Submit">
           <input type="hidden" name="parent" value="<?= $parent ?>">

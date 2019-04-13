@@ -5,6 +5,8 @@
 
   $errors = [];
 
+  print_array($_POST);
+
   if (isset($_POST['Submit']) && $_POST['Submit']) {
     if (isset($_POST['username']) && strlen($_POST['username']) > 0) {
       $username = $_POST['username'];
@@ -38,14 +40,14 @@
       $errors = add_error('email', 'לא הוכנסה כתובת אימייל', $errors);
     }
 
-    if (isset($_POST['first_name']) && strlen(trim($_POST['first_name'])) > 0) {
-      $fname = trim($_POST['first_name']);
+    if (isset($_POST['first-name']) && strlen(trim($_POST['first-name'])) > 0) {
+      $fname = trim($_POST['first-name']);
     } else {
       $errors = add_error('fname', 'לא הוכנס שם פרטי', $errors);
     }
 
-    if (isset($_POST['last_name']) && strlen(trim($_POST['last_name'])) > 0) {
-      $lname = trim($_POST['last_name']);
+    if (isset($_POST['last-name']) && strlen(trim($_POST['last-name'])) > 0) {
+      $lname = trim($_POST['last-name']);
     } else {
       $errors = add_error('lname', 'לא הוכנס שם משפחה', $errors);
     }
@@ -68,6 +70,6 @@
       header("location: ../");
     }
   }
-  // header("location: ../");
+  header("location: ../");
   
   ?>

@@ -167,3 +167,34 @@ $('#create-post-reset').click(e => {
   resetForm('create-post-form');
   document.querySelector('#create-post-form').reset();
 })
+
+$(document).ready(() => {
+  $('.bbcode').bbcode({
+    tag_bold: true,
+    tag_italic: true,
+    tag_underline: true, 
+    tag_link: true,
+    tag_image: true,
+    button_image: true,
+    image_url: 'assets/imgs/bbimage/'
+  });
+  process();
+});
+
+var bbcode = '';
+function process()
+{
+  if (bbcode != $('.bbcode').val())
+    {
+      bbcode = $('.bbcode').val();
+      $.get('functions/bbParser.php',
+        {
+          bbcode: bbcode
+        },
+        txt => {
+          $('.bbcode-preview').html(txt);
+        }
+      )
+    }
+  setTimeout(process, 2000);
+}

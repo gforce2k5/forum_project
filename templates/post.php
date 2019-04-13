@@ -9,7 +9,7 @@
       ?>
     </p>
     <p>נכתב על ידי <strong><?= sanitize_input($author) ?></strong> בתאריך <?= format_time($post->getCreationTime()) ?></p>
-    <p><?= sanitize_input($post->getContent()); ?></p>
+    <p><?= $bb_parser->getHtml(sanitize_input($post->getContent())); ?></p>
     <?php
       if ($post->getEditTime() !== $post->getCreationTime()) {
     ?>
@@ -21,5 +21,9 @@
   <div class="col-3">
     <p><strong><?= sanitize_input($author) ?></strong></p>
     <p>הצטרף בתאריך <?= format_time($register_date) ?></p>
+    <?php
+      $author_id = $post->getAuthorId();
+      include "templates/admin_buttons.php";
+    ?>
   </div>
 </div>

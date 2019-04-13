@@ -2,14 +2,12 @@ body{
   direction: rtl;
 }
 
-/* category tamplate */
-.categoryDiv {
-  margin: 0 auto;
-  background-color: rgb(36, 2, 68);
-  width: 80%;
-  color: white;
-}
-
 label.error {
   color: red;
+}
+
+.bbcode-preview {
+  border: 1px solid black;
+  height: 200px;
+  overflow: scroll;
 }

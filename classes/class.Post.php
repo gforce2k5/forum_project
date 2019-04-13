@@ -76,18 +76,19 @@ class Post{
     }
 
     function showPosts($pinned = false) {
-        global $classes;
+        global $classes, $current_user;
         $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id AND is_pinned = ".($pinned ? 1 : 0));
         if (!$posts_sql->is_ok()) return false;
         $counter = 1;
         while ($post = $posts_sql->result()) {
             $post = Post::from_sql($this->_DB, $post);
-            $sql = new SQL($this->_DB, "SELECT username, register_date FROM users WHERE id = {$post->getAuthorId()}");
+            $sql = new SQL($this->_DB, "SELECT id, username, register_date FROM users WHERE id = {$post->getAuthorId()}");
             if (!$sql->is_ok()) return false;
             $result = $sql->result();
             $author = $result['username'];
             $register_date = $result['register_date'];
             $is_topic = false;
+            $bb_parser = new bbParser();
             include "templates/post.php";
             $counter++;
             if ($counter == 2) $counter = 0;

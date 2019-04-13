@@ -26,6 +26,7 @@
   $author = $result['username'];
   $register_date = $result['register_date'];
   $counter = 0;
+  $bb_parser = new bbParser();
   include "templates/post.php";
   $post->showPosts(true);
   $post->showPosts();
