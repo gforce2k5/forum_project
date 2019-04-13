@@ -96,8 +96,13 @@
     }
 
     function show_posts($link, $pinned = false) {
+      global $classes;
       $forum_sql = new SQL($link, "SELECT * FROM posts WHERE forum_id = '$this->id' AND is_pinned = '".($pinned ? 1: 0)."' ORDER BY last_activity DESC");
       if (!$forum_sql->is_ok()) return false;
+      if ($forum_sql->rows() > 0) {
+        include SITE_ROOT."/../templates/topic_header.php";
+      }
+      $counter = 0;
       while ($topic = $forum_sql->result()) {
         $topic = Post::from_sql($link, $topic);
         $sql = new SQL($link, "SELECT username FROM users WHERE id = ".$topic->getAuthorId());
@@ -114,7 +119,9 @@
           if (!$sql->is_ok()) return false;
           $last_username = $sql->result()['username'];
         }
-        include(SITE_ROOT."/../templates/topic_cube.php");
+        include SITE_ROOT."/../templates/topic_cube.php";
+        $counter++;
+        if ($counter == 2) $counter = 0;
       }
     }
   }

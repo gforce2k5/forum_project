@@ -44,10 +44,10 @@
     }
 
     function display_forums($link) {
+      global $classes;
       $cat_sql = new SQL($link, "SELECT * FROM forums WHERE cat_id = $this->id ORDER BY cat_order ASC");
       if ($cat_sql->is_ok()) {
         $counter = 0;
-        $classes = ['bg-light text-dark', 'bg-secondary text-light'];
         while ($forum = $cat_sql->result()) {
           $sql = new SQL($link, "SELECT count(id) AS cnt FROM posts WHERE forum_id = {$forum['id']}");
           if (!$sql->is_ok()) {

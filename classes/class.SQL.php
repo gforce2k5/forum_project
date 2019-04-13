@@ -13,8 +13,7 @@
       if (!$this->sql) {
         $error = mysqli_error($link);
         mysqli_query($link, "INSERT INTO queries (query, error) VALUES ('$q', '$error')");
-      }
-      else {
+      } else {
         $this->ok = true;
         $this->id = mysqli_insert_id($link);
       }

@@ -20,7 +20,7 @@
     if (isset($_POST['description']) && strlen($_POST['description']) > 0) {
       $description = $_POST['description'];
     } else {
-      $errors = add_errors('description', 'לא הוכנס תיאור פורום', $errors);
+      $errors = add_error('description', 'לא הוכנס תיאור פורום', $errors);
     }
 
     if (isset($_POST['cat_order'])) $cat_order = $_POST['cat_order'];
@@ -37,7 +37,7 @@
     $managers = [];
     $manager_ids = [];
 
-    if (isset($_POST['managers']) && is_array($_POST['managers'])) {
+    if (isset($_POST['managers']) && is_array($_POST['managers']) && count($_POST['managers']) > 0) {
       $managers = $_POST['managers'];
       foreach($managers as $key => $value) {
         if (is_numeric($value)) {
@@ -53,7 +53,7 @@
 
     if (count($errors) > 0) {
       $_SESSION['errors'] = serialize($errors);
-      header("location: ../create_forum.php");
+      header("location: ../");
     }
 
     if ($cat_id == -1) {
@@ -83,7 +83,7 @@
     if (!$sql->is_ok() || ($sql->is_ok() && $sql->rows() == 0)) {
       $errors = add_error('sql', 'הקטגוריה שנבחרה לא קיימת', $errors);
       $_SESSION['errors'] = serialize($errors);
-      header("location: ../create_forum.php");
+      header("location: ../");
     }
 
     $forum = new Forum($name, $description, $cat_id);

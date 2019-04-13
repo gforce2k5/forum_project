@@ -11,6 +11,8 @@
 
   $link = mysqli_connect($dbhost, $dbusername, $dbpassword, $dbname) or die(mysqli_connect_error($Link));
 
+  $classes = ['bg-white text-dark', 'bg-secondary text-light'];
+
   session_start();
 
   $id_cookie = new Cookie('userid', '', 30);

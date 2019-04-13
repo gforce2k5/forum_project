@@ -17,44 +17,44 @@
             <input type="text" class="form-control" id="register-username" name="username" required>
           </div>
           <div class="form-group">
-            <label for="first-name">
+            <label for="register-first-name">
               שם פרטי:
             </label>
             <label class="error" id="register-first-name-error">* לא הוכנס שם פרטי</label>
-            <input type="text" class="form-control" id="first-name" name="first-name" required>
+            <input type="text" class="form-control" id="register-first-name" name="first-name" required>
           </div>
           <div class="form-group">
-            <label for="last-name">
+            <label for="register-last-name">
               שם משפחה:
             </label>
             <label class="error" id="register-last-name-error">* לא הוכנס שם משפחה</label>
-            <input type="text" class="form-control" id="last-name" name="last-name" required>
+            <input type="text" class="form-control" id="register-last-name" name="last-name" required>
           </div>
           <div class="form-group">
-            <label for="email">
+            <label for="register-email">
               דואר אלקטרוני:
             </label>
             <label class="error" id="register-email-error">* כתובת הדואר האלקטרוני אינה חוקית</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <input type="email" class="form-control" id="register-email" name="email" required>
           </div>
           <div class="form-group">
             <label for="register-password">
               סיסמא:
             </label>
-            <label class="error" id="register-password-error">הסיסמא חייבת להכיל לפחות אות גדולה, אות קטנה ומספר. הסיסמה חייבת להכיל לפחות 6 תווים</label>
+            <label class="error" id="register-password-error">* הסיסמא חייבת להכיל לפחות אות גדולה, אות קטנה ומספר. הסיסמה חייבת להכיל לפחות 6 תווים</label>
             <input type="password" class="form-control" id="register-password" name="password" required>
           </div>
           <div class="form-group">
-            <label for="confirmpwd">
+            <label for="register-confirmpwd">
               סיסמא בשנית:
             </label>
-            <label class="error" id="register-confirmpwd-error">הסיסמאות שהכנסת לא זהות</label>
-            <input type="password" class="form-control" id="confirmpwd" name="confirmpwd" required>
+            <label class="error" id="register-confirmpwd-error">* הסיסמאות שהכונסו לא זהות</label>
+            <input type="password" class="form-control" id="register-confirmpwd" name="confirmpwd" required>
           </div>
           <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="divur" name="divur" checked required>
-            <label class="form-check-label" for="divur" style="padding-right: 30px">קראתי את התקנון ואני מסכים</label>
-            <label class="error" id="register-divur-error">קרא את התקנון ואשר אותו</label>
+            <input type="checkbox" class="form-check-input" id="register-divur" name="divur" checked required>
+            <label class="form-check-label" for="register-divur" style="padding-right: 30px">קראתי את התקנון ואני מסכים</label>
+            <label class="error" id="register-divur-error">* קרא את התקנון ואשר אותו</label>
           </div>
           <input type="hidden" name="Submit" value="Submit">
         </form>

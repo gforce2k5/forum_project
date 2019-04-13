@@ -1,77 +1,128 @@
+const inputError = function (inputId) {
+  $(`#${inputId}`).css('border-color', '#FF0000');
+  $(`#${inputId}-error`).show();
+}
+
+const validateForumForm = function (action) {
+  resetForm(`${action}-forum-form`);
+  var validated = true;
+
+  var name = $(`#${action}-forum-name`).val().trim();
+  if (name.length == 0) {
+    inputError(`${action}-forum-name`);
+    validated = false;
+  }
+
+  var description = $(`#${action}-forum-description`).val().trim();
+  if (description.length == 0) {
+    inputError(`${action}-forum-description`);
+    validated = false;
+  }
+
+  var category = $(`#${action}-forum-category`).val();
+  var other = $(`#${action}-forum-other`).val();
+  if (category === '' || category === '-1' && other.trim().length == 0) {
+    inputError(`${action}-forum-category`);
+    inputError(`${action}-forum-other`);
+    validated = false;
+  } 
+
+  var managers = $(`#${action}-forum-managers`).val();
+  if (managers.length == 0) {
+    inputError(`${action}-forum-managers`);
+    validated = false;
+  }
+
+  return validated;
+}
+
+const validatePostFrom = function (action) {
+  resetForm(`${action}-post-form`);
+  var validated = true;
+
+  var title = $(`#${action}-post-title`).val().trim();
+  if (title.length == 0) {
+    inputError(`${action}-post-title`);
+    validated = false;
+  }
+
+  var content = $(`#${action}-post-content`).val();
+  if (content.length == 0) {
+    inputError(`${action}-post-content`);
+    validated = false;
+  }
+
+  return validated;
+}
+
 // Category list select
 
-$('#create-forum-other').hide();
+$('#create-forum-other-group').hide();
 
-$('.cat_id').change(e => {
-  if ($(this).val() == -1) {
-    $('#create-forum-other').show();
+$('#create-forum-category').change(e => {
+  if ($('#create-forum-category').val() == -1) {
+    $('#create-forum-other-group').show();
   } else {
-    $('#create-forum-other').hide();
-    $('#create-forum-other').val('');
+    $('#create-forum-other-group').hide();
+    $('#create-forum-other-group input').val('');
   }
 });
 
 // register form validation
 
 function resetForm(formId) {
-  $('#' + formId + ' label.error').hide();
-  $('#' + formId + ' input').css('border-color', '#ced4da');
+  $(`#${formId} label.error`).hide();
+  $(`#${formId} input, #${formId} select`).css('border-color', '#ced4da');
 }
 
 resetForm('register-form');
 
 $('#register-submit').click(e => {
   resetForm('register-form');
-  var errorCounter = 0;
+  var validated = true;
   var username = $('#register-username').val();
   if (!username.match(/^[A-Za-z0-9]{4,}$/)) {
-    $('#register-username').css('border-color', '#FF0000');
-    $('#register-username-error').show();
-    errorCounter++;
+    inputError('register-username');
+    validated = false;
   }
 
-  var firstName = $('#first-name').val().trim();
+  var firstName = $('#register-first-name').val().trim();
   if (firstName.length == 0) {
-    $('#first-name').css('border-color', '#FF0000');
-    $('#register-first-name-error').show();
-    errorCounter++;
+    inputError('register-first-name');
+    validated = false;
   }
 
-  var lastName = $('#last-name').val().trim();
+  var lastName = $('#register-last-name').val().trim();
   if (lastName.length == 0) {
-    $('#last-name').css('border-color', '#FF0000');
-    $('#register-last-name-error').show();
-    errorCounter++;
+    inputError('register-last-name');
+    validated = false;
   }
 
-  var email = $('#email').val().trim();
+  var email = $('#register-email').val().trim();
   if (!email.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/)) {
-    $('#email').css('border-color', '#FF0000');
-    $('#register-email-error').show();
-    errorCounter++;
+    inputError('register-email');
+    validated = false;
   }
 
   var password = $('#register-password').val();
   if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/)) {
-    $('#register-password').css('border-color', '#FF0000');
-    $('#register-password-error').show();
-    errorCounter++;
+    inputError('register-password');
+    validated = false;
   }
 
-  var confirmpwd = $('#confirmpwd').val();
+  var confirmpwd = $('#register-confirmpwd').val();
   if (password !== confirmpwd) {
-    $('#confirmpwd').css('border-color', '#FF0000');
-    $('#register-confirmpwd-error').show();
-    errorCounter++;
+    inputError('register-confirmpwd');
+    validated = false;
   }
 
-  var divur = $('#divur').prop('checked');
+  var divur = $('#register-divur').prop('checked');
   if (!divur)
   {
-    $('#register-divur-error').show();
-    errorCounter++;
+    inputError('register-divur');
+    validated = false;
   }
-  if (errorCounter == 0) $('#register-form').submit();
+  if (validated) $('#register-form').submit();
 });
 
 $('#register-reset').click(e => {
@@ -94,5 +145,25 @@ $('#login-reset').click(e => {
 resetForm('create-forum-form');
 
 $('#create-forum-submit').click(e => {
-  $('#create-forum-form').submit();
+  if (validateForumForm('create'))
+    $('#create-forum-form').submit();
+})
+
+$('#create-forum-reset').click(e => {
+  resetForm('create-forum-form');
+  document.querySelector('#create-forum-form').reset();
+})
+
+// create post form validation
+
+resetForm('create-post-form');
+
+$('#create-post-submit').click(e => {
+  if (validatePostFrom('create'))
+    $('#create-post-form').submit();
+})
+
+$('#create-post-reset').click(e => {
+  resetForm('create-post-form');
+  document.querySelector('#create-post-form').reset();
 })

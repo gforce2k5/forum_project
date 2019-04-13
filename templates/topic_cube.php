@@ -1,14 +1,12 @@
-<div style="border: 1px solid <?= $pinned ? 'red' : 'black' ?>">
-  <h4><a href="view_topic.php?p=<?= $topic->getId() ?>"><?= htmlspecialchars($topic->getTitle()) ?></a></h4>
-  <p>Author: <?= sanitize_input($author) ?></p>
-  <p>Created At: <?= $topic->getCreationTime() ?></p>
-  <p>Last Edit: <?= $topic->getEditTime() ?></p>
-  <p>Reply count: <?= $post_count ?></p>
-  <hr>
-  <p><?= sanitize_input($topic->getContent()); ?></p>
-  <hr>
-  <?php if ($last_reply_time) { ?>
-    <p>Last reply at: <?= $last_reply_time ?></p>
-    <p>By: <?= $last_username ?></p>
-  <?php } ?>
+<div class="row <?= $classes[$counter] ?>">
+  <div class="col-6 text-right">
+    <strong><a class="<?= explode(' ', $classes[$counter])[1] ?>" href="view_topic.php?p=<?= $topic->getId() ?>"><?= htmlspecialchars($topic->getTitle()) ?></a></strong>
+    <p>על ידי <strong><?= sanitize_input($author) ?></strong> בתאריך <?= format_time($topic->getCreationTime()) ?></p>
+  </div>
+  <div class="col-2 text-center"><?= $post_count ?></div>
+  <div class="col-4 text-right">
+    <?php if ($last_reply_time) { ?>
+      נכתבה בתאריך <?= format_time($last_reply_time) ?> על ידי <strong><?= sanitize_input($last_username) ?></strong>
+    <?php } ?>
+  </div>
 </div>

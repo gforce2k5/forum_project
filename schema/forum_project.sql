@@ -139,13 +139,6 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `first_name`, `last_name`, `password`, `avatar`, `register_date`, `last_entry`, `signature`, `email`, `hash`, `status`) VALUES
-(1, 'guyev', 'Guy', 'Even', '$2y$10$7eRwOMqD8D0S.3DHaXfD.eB7CL9m/Wl76xe6awF0fy/yK6FTT0vum', '', '2019-03-29 15:06:50', '2019-04-06 18:51:17', '', 'gforce2k5@gmail.com', NULL, 2),
-(2, 'galia', 'Galia', 'Appel', '$2y$10$uzMk4E/JwHHZVH2HZ.P2Z.NFYbBgnZtUYs7Ojmyu/mmd9hLp29uwK', '', '2019-03-31 16:12:26', '2019-04-04 14:34:42', '', 'galia@gmail.com', NULL, 1),
-(3, 'user', 'shlomi', 'tur', '$2y$10$bnOHS6TkkVJSxzNodTICJeY1.EXDaEg.MrEH0IYNV/sGQLzPnwxUS', '', '2019-03-31 17:30:04', '2019-03-31 16:30:21', '', 'sh@gmail.com', NULL, 1),
-(4, 'guy12', 'G', 'E', '$2y$10$Q78QVzGGmOjPAJ3qRmhwOuFdtUw3nYhAnXfgb40l.wnhBVdX0Ts.O', '', '2019-04-01 19:51:34', '2019-04-01 19:51:34', '', 'g@2.e3', NULL, 1),
-(5, 'shlomi', 'shlomi', 'tur', '$2y$10$G5WIOG2VMnIwvWozBkqtxu1Yczs3OlrqPsWSCuSMhnNwRdOIC1iGC', '', '2019-04-02 16:38:16', '2019-04-02 15:38:55', '', 'shlomi.tur@gmail.com', NULL, 1);
-
 --
 -- Indexes for dumped tables
 --

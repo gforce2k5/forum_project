@@ -13,7 +13,7 @@
             <label for="<?= $action ?>-forum-name" id="<?= $action ?>-forum-name-label">
               שם הפורום:
             </label>
-            <label class="error" id="<?= $action ?>forum-name-error">* לא הוכנס שם פורום</label>
+            <label class="error" id="<?= $action ?>-forum-name-error">* לא הוכנס שם פורום</label>
             <input type="text" class="form-control" id="<?= $action ?>-forum-name" name="name" required>
           </div>
           <div class="form-group">
@@ -21,26 +21,27 @@
               תיאור:
             </label>
             <label class="error" id="<?= $action ?>-forum-description-error">* לא הוכנס תיאור</label>
-            <input type="text" class="form-control" id="<? $action ?>-forum-description" name="description" required>
+            <input type="text" class="form-control" id="<?= $action ?>-forum-description" name="description" required>
           </div>
           <div class="form-group">
             <label for="<?= $action ?>-forum-category">בחר קטגוריה</label>
-            <select class="form-control" class="cat_id" name="cat_id" id="<?= $action ?>-form-category" required>
+            <label class="error" id="<?= $action ?>-forum-category-error">* לא נבחרה קטגוריה</label>
+            <select class="form-control" name="cat_id" id="<?= $action ?>-forum-category" required>
               <option value=''></option>
               <?= Category::show_category_list($link) ?>
               <option value="-1">אחר...</option>
             </select>
           </div>
-          <div class="form-group" id="<? $action ?>-forum-other-group">
+          <div class="form-group" id="<?= $action ?>-forum-other-group">
             <label for="<?= $action ?>-forum-other">
               אחר:
             </label>
-            <label class="error" id="<?= $action ?>-forum-other">* לא נבחרה קטגוריה</label>
-            <input type="text" class="form-control" id="<? $action ?>-forum-other" name="other">
+            <input type="text" class="form-control" id="<?= $action ?>-forum-other" name="other">
           </div>
           <div class="form-group">
             <label for="<?= $action ?>-forum-managers">בחר מנהל/ים</label>
-            <select class="form-control" name="managers[]" id="<?= $action ?>-form-managers" required multiple>
+            <label class="error" id="<?= $action ?>-forum-managers-error">* לא נבחרו מנהלים</label>
+            <select class="form-control" name="managers[]" id="<?= $action ?>-forum-managers" required multiple>
               <?= User::get_active_users($link) ?>
             </select>
           </div>

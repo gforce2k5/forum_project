@@ -12,7 +12,7 @@
   <?php
     if ($last_post_time) {
   ?>
-      נכתבה על ידי <?= $username ?> בתאריך <?= format_time($last_post_time) ?>
+      נכתבה על ידי <strong><?= sanitize_input($username) ?></strong> בתאריך <?= format_time($last_post_time) ?>
   <?php
     }
   ?>
