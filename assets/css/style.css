@@ -10,4 +10,10 @@ label.error {
   border: 1px solid black;
   height: 200px;
   overflow: scroll;
+  background: white;
+}
+
+.bb_bar {
+  background: white;
+  display: inline-block;
 }

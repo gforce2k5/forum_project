@@ -17,9 +17,10 @@
       image_url: 'bbimage/'
     },options||{});
     //  panel 
-    var text = '<div id="bbcode_bb_bar">'
+    var parent_id = $(this).attr('id');
+    var text = `<div id="${parent_id}-bbcode_bb_bar" class="bb_bar">`
     if(options.tag_bold){
-      text = text + '<a href="#" id="b" title="">';
+      text = text + `<a href="#" id="${parent_id}-b" title="">`;
       if(options.button_image){
         text = text + '<img src="' + options.image_url + 'bold.png" />';
       }else{
@@ -28,7 +29,7 @@
       text = text + '</a>';
     }
     if(options.tag_italic){
-      text = text + '<a href="#" id="i" title="">';
+      text = text + `<a href="#" id="${parent_id}-i" title="">`;
       if(options.button_image){
         text = text + '<img src="' + options.image_url + 'italic.png" />';
       }else{
@@ -37,7 +38,7 @@
       text = text + '</a>';
     }
     if(options.tag_underline){
-      text = text + '<a href="#" id="u" title="">';
+      text = text + `<a href="#" id="${parent_id}-u" title="">`;
       if(options.button_image){
         text = text + '<img src="' + options.image_url + 'underline.png" />';
       }else{
@@ -46,7 +47,7 @@
       text = text + '</a>';
     }
     if(options.tag_link){
-      text = text + '<a href="#" id="url" title="">';
+      text = text + `<a href="#" id="${parent_id}-url" title="">`;
       if(options.button_image){
         text = text + '<img src="' + options.image_url + 'link.png" />';
       }else{
@@ -55,7 +56,7 @@
       text = text + '</a>';
     }
     if(options.tag_image){
-      text = text + '<a href="#" id="img" title="">';
+      text = text + `<a href="#" id="${parent_id}-img" title="">`;
       if(options.button_image){
         text = text + '<img src="' + options.image_url + 'image.png" />';
       }else{
@@ -64,15 +65,16 @@
       text = text + '</a>';
     }
     text = text + '</div>';
-    
-    $(this).wrap('<div id="bbcode_container"></div>');
-    $("#bbcode_container").prepend(text);
-    $("#bbcode_bb_bar a img").css("border", "none");
+    var container_id = `${parent_id}-bbcode_container`;
+    $(this).wrap(`<div id="${container_id}"></div>`);
+    console.log($(`#${container_id}`));
+    $(`#${container_id}`).prepend(text);
+    $(`#${parent_id}-bbcode_bb_bar a img`).css("border", "none");
     var id = '#' + $(this).attr("id");
     var e = $(id).get(0);
     
-    $('#bbcode_bb_bar a').click(function() {
-      var button_id = $(this).attr("id");
+    $(`#${parent_id}-bbcode_bb_bar a`).click(function() {
+      var button_id = $(this).attr("id").split('-').last();
       var start = '['+button_id+']';
       var end = '[/'+button_id+']';
 
@@ -109,24 +111,28 @@
   }
  
 // hotkeys 
-$(document).keyup(function (e) 
-{ if(e.which == 17) isCtrl = false; }).keydown(function (e) 
-{ if(e.which == 17) isCtrl = true; 
-if (e.which == 66 && isCtrl == true) // CTRL + B, bold
-{ 
-	$("#b").click();
-	return false;
-} 
-else if (e.which == 73 && isCtrl == true) // CTRL + I, italic
-{ 
-	$("#i").click();
-	return false;
-} 
-else if (e.which == 85 && isCtrl == true) // CTRL + U, underline
-{ 
-	$("#u").click();
-	return false;
-}
-})
+// $(document).keyup(function (e) 
+// { if(e.which == 17) isCtrl = false; }).keydown(function (e) 
+// { if(e.which == 17) isCtrl = true; 
+// if (e.which == 66 && isCtrl == true) // CTRL + B, bold
+// { 
+// 	$("#b").click();
+// 	return false;
+// } 
+// else if (e.which == 73 && isCtrl == true) // CTRL + I, italic
+// { 
+// 	$("#i").click();
+// 	return false;
+// } 
+// else if (e.which == 85 && isCtrl == true) // CTRL + U, underline
+// { 
+// 	$("#u").click();
+// 	return false;
+// }
+// })
   
 })(jQuery)
+
+Array.prototype.last = function() {
+  return this[this.length - 1];
+}

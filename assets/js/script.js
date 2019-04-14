@@ -169,7 +169,7 @@ $('#create-post-reset').click(e => {
 })
 
 $(document).ready(() => {
-  $('.bbcode').bbcode({
+  var options = {
     tag_bold: true,
     tag_italic: true,
     tag_underline: true, 
@@ -177,24 +177,43 @@ $(document).ready(() => {
     tag_image: true,
     button_image: true,
     image_url: 'assets/imgs/bbimage/'
-  });
+  }
+
+  $('#create-post-content').bbcode(options);
   process();
+
+  $('#edit-post-content').bbcode(options);
+  process2();
 });
 
 var bbcode = '';
-function process()
-{
-  if (bbcode != $('.bbcode').val())
-    {
-      bbcode = $('.bbcode').val();
-      $.get('functions/bbParser.php',
-        {
-          bbcode: bbcode
-        },
-        txt => {
-          $('.bbcode-preview').html(txt);
-        }
-      )
-    }
+function process() {
+  if (bbcode != $('#create-post-content').val()) {
+    bbcode = $('#create-post-content').val();
+    $.get('functions/bbParser.php',
+      {
+        bbcode: bbcode
+      },
+      txt => {
+        $('#create-bbcode-preview').html(txt);
+      }
+    )
+  }
   setTimeout(process, 2000);
+}
+
+var bbcode2 = '';
+function process2() {
+  if (bbcode2 != $('#edit-post-content').val()) {
+    bbcode2 = $('#edit-post-content').val();
+    $.get('functions/bbParser.php',
+      {
+        bbcode: bbcode2
+      },
+      txt => {
+        $('#edit-post-preview').html(txt);
+      }
+    )
+  }
+  setTimeout(process2, 2000);
 }

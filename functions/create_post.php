@@ -7,37 +7,17 @@
     header("location: ../");
   }
 
-  if (isset($_POST['title']) && strlen($_POST['title']) > 0) {
-    $title = $_POST['title'];
-  } else {
-    $errors = add_error('title', 'לא הוכנסה כותרת לפוסט', $errors);
-  }
-
-  if (isset($_POST['content']) && strlen($_POST['content']) > 0) {
-    $content = $_POST['content'];
-  } else {
-    $errors = add_error('content', 'לא הכנסת תוכן לפוסט', $errors);
-  }
-
-  if (isset($_POST['parent']) && strlen($_POST['parent']) == 1) {
-    $parent = $_POST['parent'];
-    if ($parent != 'f' && $parent != 'p') {
-      $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
-    }
-  } else {
-    $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
-  }
-
-  if (isset($_POST['parent_id']) && is_numeric($_POST['parent_id'])) {
-    $parent_id = intval($_POST['parent_id']);
-  } else {
-    $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
-  }
+  array_merge($errors, validate_post($_POST));
 
   if (count($errors) > 0) {
     $_SESSION['errors'] = serialize($errors);
     header("location: ../");
   }
+
+  $title = $_POST['title'];
+  $content = $_POST['content'];
+  $parent = $_POST['parent'];
+  $parent_id = intval($_POST['parent_id']);
 
   $post = new Post($link, $title, $content, $current_user->get_id(), null, null, $parent == 'f' ? $parent_id : null, $parent == 'p' ? $parent_id : null);
 

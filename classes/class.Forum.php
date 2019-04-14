@@ -16,6 +16,15 @@
       }
     }
 
+    static function getManagers($link, $f_id) {
+      $sql = new SQL($link, "SELECT u.id, username FROM users as u JOIN forum_managers as fm ON u.id = fm.user_id AND fm.forum_id = $f_id");
+
+      if ($sql->is_ok()) {
+        return $sql;
+      }
+      return null;
+    }
+
     function __construct($name, $description, $cat_id, $id = null, $create_date = null, $cat_order = '', $active = true) {
       $this->name = $name;
       $this->description = $description;

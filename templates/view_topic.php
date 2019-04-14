@@ -9,7 +9,7 @@
 <h3 class="text-right"><?= sanitize_input($topic->getTitle()) ?></h3>
 <?php if (!$topic->isLocked() && is_logged_in()) { ?>
   <div class="text-right mb-5">
-    <a data-toggle="modal" data-target="#create-post-modal" class="btn btn-primary" href="#">תגובה חדשה</a>
+    <a data-toggle="modal" data-target="#create-post-modal" class="btn btn-primary text-light">תגובה חדשה</a>
   </div>
 <?php
     $action = 'create';
@@ -17,9 +17,11 @@
     $parent_id = $topic->getId();
     include "templates/post_form.php";
   }
-?>
-<?php
   $is_topic = true;
+  $edit = false;
+  if ($topic->getId() == $e_id) {
+    $edit = true;
+  }
   $post = $topic;
   $sql = new SQL($link, "SELECT username, register_date FROM users WHERE id = {$topic->getAuthorId()}");
   $result = $sql->result();
@@ -28,10 +30,6 @@
   $counter = 0;
   $bb_parser = new bbParser();
   include "templates/post.php";
-  $post->showPosts(true);
-  $post->showPosts();
-  $action = 'create';
-  $parent = 'p';
-  $parent_id = $post->getId();
-  include "post_form.php";
+  $post->showPosts(true, $e_id);
+  $post->showPosts(false, $e_id);
 ?>

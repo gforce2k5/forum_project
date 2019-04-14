@@ -60,4 +60,48 @@
   function format_time($time) {
     return date('d-m-Y H:i:s', strtotime($time));
   }
+
+  function validate_post($p, $create = true) {
+    $errors = [];
+    if (!isset($p['title']) || strlen($p['title']) == 0) {
+      $errors = add_error('title', 'לא הוכנסה כותרת לפוסט', $errors);
+    }
+  
+    if (!isset($p['content']) || strlen($p['content']) == 0) {
+      $errors = add_error('content', 'לא הכנסת תוכן לפוסט', $errors);
+    }
+
+    if ($create) {
+      if (!isset($p['parent']) || strlen($p['parent']) != 1) {
+        $parent = $p['parent'];
+        if ($parent != 'f' && $parent != 'p') {
+          $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
+        }
+      } else {
+        $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
+      }
+    
+      if (!isset($p['parent_id']) || !is_numeric($p['parent_id'])) {
+        $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
+      }
+    } else {
+      if (!isset($p['p_id']) || !is_numeric($p['p_id'])) {
+        $errors = add_error('error', 'קרתה שגיאה אנא נסה שוב', $errors);
+      }
+    }
+
+    return $errors;
+  }
+
+  function is_manager($link, $user_id, $forum_id) {
+    if (isset($_SESSION["$forum_id-manager"])) return true;
+    $managers = Forum::getManagers($link, $forum_id);
+    while ($manager_id = $managers->result()['id']) {
+      if ($user_id == $manager_id) {
+        return true;
+        $_SESSION["$forum_id-manager"] = true;
+      }
+    }
+    return false;
+  }
 ?>

@@ -75,13 +75,15 @@ class Post{
         return $sql->is_ok();
     }
 
-    function showPosts($pinned = false) {
+    function showPosts($pinned = false, $edit_id = null) {
         global $classes, $current_user;
         $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id AND is_pinned = ".($pinned ? 1 : 0));
         if (!$posts_sql->is_ok()) return false;
         $counter = 1;
+        $link = $this->_DB;
         while ($post = $posts_sql->result()) {
             $post = Post::from_sql($this->_DB, $post);
+            $edit = $post->getId() == $edit_id;
             $sql = new SQL($this->_DB, "SELECT id, username, register_date FROM users WHERE id = {$post->getAuthorId()}");
             if (!$sql->is_ok()) return false;
             $result = $sql->result();
