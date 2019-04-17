@@ -20,7 +20,7 @@ class Post{
 
     static function from_id($db, $id) {
         $sql = new SQL($db, "SELECT * FROM posts WHERE id = $id");
-        if ($sql->is_ok()) {
+        if ($sql->is_ok() && $sql->rows() == 1) {
             return Post::from_sql($db, $sql->result());
         }
         return null;
@@ -54,12 +54,12 @@ class Post{
         return false;
     }
 
-    function deletePost(){
+    function delete(){
         //update value
 
-        $sql = new SQL($this->_DB, "DELETE FROM posts WHERE id = $this->id LIMIT 1");
+        $sql = new SQL($this->_DB, "DELETE FROM posts WHERE id = $this->_id LIMIT 1");
         if ($sql->is_ok()) {
-            $sql = new SQL($this->_DB, "DELETE FROM posts WHERE post_id = $this->id");
+            $sql = new SQL($this->_DB, "DELETE FROM posts WHERE post_id = $this->_id");
             return $sql->is_ok();
         }
 
@@ -81,6 +81,7 @@ class Post{
         if (!$posts_sql->is_ok()) return false;
         $counter = 1;
         $link = $this->_DB;
+        $topic = $this;
         while ($post = $posts_sql->result()) {
             $post = Post::from_sql($this->_DB, $post);
             $edit = $post->getId() == $edit_id;
@@ -130,7 +131,7 @@ class Post{
     }
 
     function getForumId() {
-        return $this->forumId;
+        return $this->forumId ? $this->forumId : ($this->postId ? Post::from_id($this->_DB, $this->postId)->getForumId() : null);
     }
 
     function setForumId($value) {
@@ -146,11 +147,11 @@ class Post{
     }
 
     function pinPost() {
-        $this->isPinned = true;
+        $this->isPinned = 1;
     }
 
     function unpinPost() {
-        $this->isPinned = false;
+        $this->isPinned = 0;
     }
 
     function isLocked() {
@@ -158,11 +159,11 @@ class Post{
     }
 
     function lockPost() {
-        $this->isLocked = true;
+        $this->isLocked = 1;
     }
 
     function unlockPost() {
-        $this->isLocked = false;
+        $this->isLocked = 0;
     }
 
     function updateActivity() {

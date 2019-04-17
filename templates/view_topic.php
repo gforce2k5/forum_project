@@ -7,15 +7,21 @@
 </nav>
 
 <h3 class="text-right"><?= sanitize_input($topic->getTitle()) ?></h3>
-<?php if (!$topic->isLocked() && is_logged_in()) { ?>
-  <div class="text-right mb-5">
-    <a data-toggle="modal" data-target="#create-post-modal" class="btn btn-primary text-light">תגובה חדשה</a>
-  </div>
+<?php if (is_logged_in()) {
+   if (!$topic->isLocked()) {?>
+    <div class="text-right mb-5">
+      <a data-toggle="modal" data-target="#create-post-modal" class="btn btn-primary text-light">תגובה חדשה</a>
+    </div>
 <?php
-    $action = 'create';
-    $parent = 'p';
-    $parent_id = $topic->getId();
-    include "templates/post_form.php";
+      $action = 'create';
+      $parent = 'p';
+      $parent_id = $topic->getId();
+      include "templates/post_form.php";
+    }
+
+    if ($current_user->get_status() == 2 || $current_user->is_manager($link, $forum->get_id())) {
+      include "templates/delete_post_form.php";
+    }
   }
   $is_topic = true;
   $edit = false;

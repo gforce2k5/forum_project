@@ -25,9 +25,10 @@
 <div class="col-2 text-center <?= $classes[$counter] ?>"><?= $post_count ?></div>
 <div class="col-2 text-left <?= $classes[$counter] ?>">
   <?php
-    if ($last_post_time) {
+    if (isset($last_post)) {
   ?>
-      נכתבה על ידי <strong><?= sanitize_input($username) ?></strong> בתאריך <?= format_time($last_post_time) ?>
+      <strong><a class=<?= explode(' ', $classes[$counter])[1] ?> href="view_topic.php?p=<?= $last_post->getId() ?>"><?= $last_post->getTitle() ?></a></strong><br />
+      נכתב על ידי <strong><?= sanitize_input($username) ?></strong> בתאריך <?= format_time($last_post->getCreationTime()) ?>
   <?php
     }
   ?>

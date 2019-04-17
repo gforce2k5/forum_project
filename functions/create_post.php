@@ -21,6 +21,12 @@
 
   $post = new Post($link, $title, $content, $current_user->get_id(), null, null, $parent == 'f' ? $parent_id : null, $parent == 'p' ? $parent_id : null);
 
+  if ($parent == 'f' && ($current_user->get_status() == 2 || $current_user->is_manager($link, $parent_id))) {
+    if (isset($_POST['pin']) && $_POST['pin']) {
+      $post->pinPost();
+    }
+  }
+
   if (!$post->addToDb()) {
     $_SESSION['errors'] = serialize(add_error('sql', mysqli_error($link), $errors));
     header("location: ../view_".$parent == 'f' ? 'forum' : 'topic'.".php?$parent=$parent_id");

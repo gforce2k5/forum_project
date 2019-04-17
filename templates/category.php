@@ -8,6 +8,6 @@
   </div>
   <div class="col-2 text-center bg-dark text-light"><h4>נושאים</h4></div>
   <div class="col-2 text-center bg-dark text-light"><h4>תגובות</h4></div>
-  <div class="col-2 text-center bg-dark text-light"><h4>תגובה אחרונה</h4></div>
+  <div class="col-2 text-center bg-dark text-light"><h4>נושא אחרון</h4></div>
   <?php $cat->display_forums($link); ?>
 </div>

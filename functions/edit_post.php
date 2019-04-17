@@ -19,14 +19,26 @@
   $p_id = $_POST['p_id'];
   $post = Post::from_id($link, $p_id);
 
-  $f_id = $post->getForumId() ? $post->getForumId() : Post::from_id($link, $post->getPostId())->getForumId();
+  $f_id = $post->getForumId();
 
-  if ($current_user->get_status() == 2 || $post->getAuthorId() == $current_user->get_id() || is_manager($link, $current_user->get_id(), $f_id)) {
+  if ($current_user->get_status() == 2 || $post->getAuthorId() == $current_user->get_id() || $current_user->is_manager($link, $f_id)) {
+    if ($post->getAuthorId() != $current_user->get_id) {
+      if (isset($_POST['pin']) && $_POST['pin']) {
+        $post->pinPost();
+      } else {
+        $post->unpinPost();
+      }
+      if (isset($_POST['lock']) && $_POST['lock']) {
+        $post->lockPost();
+      } else {
+        $post->unlockPost();
+      }
+    }
     $post->setTitle($title);
     $post->setContent($content);
     $post->editDB();
     $_SESSION['success'] = 'הנושא נערך בהצלחה';
-    $id = $post->getForumId() ? $post->getId() : $post->getPostId()."#{$post->getId()}";
+    $id = $post->getPostId() ? $post->getPostId()."#{$post->getId()}" : $post->getId();
     header("location: ../view_topic.php?p=$id");
   } else {
     $errors = add_error('user', 'אין לך הרשאה לביצוע בעולה זו', $errors);

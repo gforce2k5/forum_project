@@ -12,6 +12,8 @@
       $this->sql = mysqli_query($link, $q);
       if (!$this->sql) {
         $error = mysqli_error($link);
+        echo $q."<br/>";
+        echo $error;
         mysqli_query($link, "INSERT INTO queries (query, error) VALUES ('$q', '$error')");
       } else {
         $this->ok = true;

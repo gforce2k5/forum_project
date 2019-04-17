@@ -54,25 +54,28 @@
             return false;
           }
           $topic_count = $sql->result()['cnt'];
-          $sql = new SQL($link, "SELECT count(p1.id) AS cnt FROM posts AS p1 JOIN posts AS p2 ON p1.post_id = p2.id AND   p2.forum_id = {$forum['id']}");
+          $sql = new SQL($link, "SELECT count(p1.id) AS cnt FROM posts AS p1 JOIN posts AS p2 ON p1.post_id = p2.id AND p2.forum_id = {$forum['id']}");
           if (!$sql->is_ok()) {
             return false;
           }
           $post_count = $sql->result()['cnt'];
 
-          $sql = new SQL($link, "SELECT GREATEST(max(p1.creation_time), max(p2.creation_time)) AS time FROM posts AS p1 JOIN posts AS p2 ON p2.post_id = p1.id AND p1.forum_id = {$forum['id']};");
+          $sql = new SQL($link, "SELECT * FROM posts WHERE forum_id = {$forum['id']} ORDER BY creation_time DESC LIMIT 1");
+          // $sql = new SQL($link, "SELECT GREATEST(max(p1.creation_time), max(p2.creation_time)) AS time FROM posts AS p1 JOIN posts AS p2 ON p2.post_id = p1.id AND p1.forum_id = {$forum['id']};");
           if (!$sql->is_ok()) return false;
-
-          $last_post_time = $sql->result()['time'];
           
-          $sql = new SQL($link, "SELECT username FROM users WHERE id = (SELECT author_id FROM posts WHERE creation_time = '$last_post_time')");
+          if ($sql->rows() > 0) {
+            $last_post = Post::from_sql($link, $sql->result());
+            
+            $sql = new SQL($link, "SELECT username FROM users WHERE id = {$last_post->getAuthorId()}");
 
-          if (!$sql->is_ok()) {
-            return false;
+            $username = $sql->result()['username'];
+            if (!$sql->is_ok()) {
+              return false;
+            }
           }
           $cat_name = $this->name;
           $cat_id = $this->id;
-          $username = $sql->result()['username'];
           include SITE_ROOT."/../templates/forum.php";
           $counter++;
           if ($counter == 2) $counter = 0;

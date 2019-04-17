@@ -23,7 +23,7 @@
       if (is_logged_in() && isset($_GET['e']) && is_numeric($_GET['e'])) {
         $e_id = intval($_GET['e']);
         $query = "SELECT id FROM posts WHERE id = $e_id";
-        if ($current_user->get_status() != 2 && !is_manager($link, $current_user->get_id(), $forum->get_id()))
+        if ($current_user->get_status() != 2 && !$current_user->is_manager($link, $forum->get_id()))
           $query .= " AND author_id = {$current_user->get_id()}";
         $sql = new SQL($link, $query);
         if (!$sql->is_ok() || $sql->rows() == 0) {

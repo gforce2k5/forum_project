@@ -67,7 +67,6 @@
     text = text + '</div>';
     var container_id = `${parent_id}-bbcode_container`;
     $(this).wrap(`<div id="${container_id}"></div>`);
-    console.log($(`#${container_id}`));
     $(`#${container_id}`).prepend(text);
     $(`#${parent_id}-bbcode_bb_bar a img`).css("border", "none");
     var id = '#' + $(this).attr("id");

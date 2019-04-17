@@ -11,6 +11,20 @@
             <textarea class="form-control" id="edit-post-content" name="content" rows="3"><?= $post->getContent() ?></textarea>
           </div>
           <?php
+            if (!$post->getPostId() && ($current_user->get_status() == 2 || $current_user->is_manager($link, $post->getForumId()))) {
+          ?>
+              <div class="form-group">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="create-post-pin" name="pin"<?= $post->isPinned() ? ' checked' : '' ?>>
+                  <label class="form-check-label" for="create-post-pim" style="padding-right: 30px">נעץ את הנושא</label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="create-post-lock" name="lock"<?= $post->isLocked() ? ' checked' : '' ?>>
+                  <label class="form-check-label" for="create-post-lock" style="padding-right: 30px">נעל את הנושא</label>
+                </div>
+              </div>
+          <?php
+            }
             $bb_parser = new bbParser();
           ?>
           <div class="form-group">

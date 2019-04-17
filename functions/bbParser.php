@@ -19,7 +19,7 @@
       $patern="#\[img\]([^\[]*)\[/img\]#i";
       $replace='<img src="\\1" alt=""/>';
       $str=preg_replace($patern, $replace, $str);  
-	  $str=nl2br($str);
+	    $str=nl2br($str);
       return $str;
     }
   }

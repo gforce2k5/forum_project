@@ -217,3 +217,11 @@ function process2() {
   }
   setTimeout(process2, 2000);
 }
+
+$('.delete').on('click', function(e) {
+  $('#delete-post-id').val($(this).attr('data-id'));
+});
+
+$('#delete-post-submit').on('click', function(e) {
+  $('#delete-post-form').submit();
+});

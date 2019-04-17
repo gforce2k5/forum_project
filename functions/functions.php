@@ -92,16 +92,4 @@
 
     return $errors;
   }
-
-  function is_manager($link, $user_id, $forum_id) {
-    if (isset($_SESSION["$forum_id-manager"])) return true;
-    $managers = Forum::getManagers($link, $forum_id);
-    while ($manager_id = $managers->result()['id']) {
-      if ($user_id == $manager_id) {
-        return true;
-        $_SESSION["$forum_id-manager"] = true;
-      }
-    }
-    return false;
-  }
 ?>

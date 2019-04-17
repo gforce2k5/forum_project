@@ -217,6 +217,18 @@
         new SQL($link, "UPDATE users SET last_entry = '".sql_time(time())."' WHERE id = '$this->id'");
       }
     }
+
+    function is_manager($link, $forum_id) {
+      if (isset($_SESSION["$forum_id-manager"])) return true;
+      $managers = Forum::getManagers($link, $forum_id);
+      while ($manager_id = $managers->result()['id']) {
+        if ($this->id == $manager_id) {
+          $_SESSION["$forum_id-manager"] = true;
+          return true;
+        }
+      }
+      return false;
+    }
   }
 
 ?>
