@@ -27,19 +27,32 @@
     }
   }
 
+  if ($parent == 'p') {
+    $parent_post = Post::from_id($link, $parent_id);
+    $forum = Forum::from_id($link, $parent_post->getForumId());
+    if (($parent_post->isLocked() || $forum->is_locked()) && $current_user->get_status() != 2 && !$current_user->is_manager($link, $parent_post->getForumId)) {
+      $_SESSION['errors'] = serialize(add_error('auth', 'לא ניתן להוסיף תגובה לנושא נעול', $errors));
+      header("location: {$_SERVER['HTTP_REFERER']}");
+    } else {
+      $parent_post->updateActivity();
+      if(!$parent_post->editDB()) {
+        $_SESSION['errors'] = serialize(add_error('sql', mysqli_error($link), $errors));
+      }
+    header("location: ../view_".$parent == 'f' ? 'forum' : 'topic'.".php?$parent=$parent_id");
+    }
+  } else {
+    $forum = Forum::from_id($link, $parent_id);
+    if (!$forum->is_active() && !$current_user->get_status() != 2 && !$current_user->is_manager($link, $parent_id)) {
+      $_SESSION['errors'] = serialize(add_error('auth', 'לא ניתן להוסיף נושא בפורום לא פעיל', $errors));
+      header("location: {$_SERVER['HTTP_REFERER']}");
+    }
+  }
+
   if (!$post->addToDb()) {
     $_SESSION['errors'] = serialize(add_error('sql', mysqli_error($link), $errors));
     header("location: ../view_".$parent == 'f' ? 'forum' : 'topic'.".php?$parent=$parent_id");
   };
 
-  if ($parent == 'p') {
-    $parent_post = Post::from_id($link, $parent_id);
-    $parent_post->updateActivity();
-    if(!$parent_post->editDB()) {
-      $_SESSION['errors'] = serialize(add_error('sql', mysqli_error($link), $errors));
-    }
-    header("location: ../view_".$parent == 'f' ? 'forum' : 'topic'.".php?$parent=$parent_id");
-  }
 
   header("location: ../view_topic.php?p=".($parent == 'f' ? $post->getId() : $parent_id));
 ?>

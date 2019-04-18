@@ -77,6 +77,7 @@ class Post{
 
     function showPosts($pinned = false, $edit_id = null) {
         global $classes, $current_user;
+        $forum = Forum::from_id($this->_DB, $this->forumId);
         $posts_sql = new SQL($this->_DB, "SELECT * FROM posts WHERE post_id = $this->_id AND is_pinned = ".($pinned ? 1 : 0));
         if (!$posts_sql->is_ok()) return false;
         $counter = 1;

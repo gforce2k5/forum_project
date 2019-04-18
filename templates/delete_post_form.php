@@ -14,8 +14,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal" form>לא</button>
-        <button type="button" class="btn btn-danger" id="delete-post-submit">כן</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" form><i class="fas fa-check"></i> לא</button>
+        <button type="button" class="btn btn-danger" id="delete-post-submit"><i class="fas fa-trash-alt"></i> כן</button>
       </div>
     </div>
   </div>

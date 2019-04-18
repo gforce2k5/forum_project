@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">  
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
   
   <link rel="stylesheet" href="assets/css/style.css">
 
@@ -26,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-              <a class="nav-link" href="./">בית <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="./"><i class="fas fa-home"></i> בית<span class="sr-only">(current)</span></a>
             </li>
             <?php
               if (is_logged_in()) {
@@ -51,12 +52,12 @@
             ?>
                 <li class="nav-item">
                   <a href="#" class="nav-link" data-toggle="modal" data-target="#register-modal">
-                    הרשמה
+                  <i class="fas fa-user-plus"></i> הרשמה
                   </a>
                 </li>
                 <li class="nav-item">
                   <a href="#" class="nav-link" data-toggle="modal" data-target="#login-modal">
-                    התחברות
+                  <i class="fas fa-sign-in-alt"></i> התחברות
                   </a>
                 </li>
             <?php
@@ -65,7 +66,7 @@
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="חיפוש">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">חיפוש</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i> חיפוש</button>
           </form>
         </div>
       </nav>

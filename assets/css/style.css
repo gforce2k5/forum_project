@@ -17,3 +17,7 @@ label.error {
   background: white;
   display: inline-block;
 }
+
+.icon {
+  font-size: 60px;
+}

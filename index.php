@@ -7,7 +7,7 @@
 ?>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item active">עמוד הבית</li>
+    <li class="breadcrumb-item active"><i class="fas fa-home"></i> עמוד הבית</li>
   </ol>
 </nav>
 <?php

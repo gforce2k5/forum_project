@@ -120,11 +120,12 @@
         $sql = new SQL($link, "SELECT count(id) as cnt FROM posts WHERE post_id = ".$topic->getId());
         if (!$sql->is_ok()) return false;
         $post_count = $sql->result()['cnt'];
-        $sql = new SQL($link, "SELECT max(creation_time) as last_reply FROM posts WHERE post_id = {$topic->getId()}");
-        if (!$sql->is_ok()) return false;
-        $last_reply_time = $sql->result()['last_reply'];
-        if ($last_reply_time) {
-          $sql = new SQL($link, "SELECT username FROM users WHERE id = (SELECT author_id FROM posts WHERE post_id = '{$topic->getId()}' AND creation_time = '$last_reply_time')");
+        $last_post_sql = new SQL($link, "SELECT id, title, creation_time as last_reply, author_id FROM posts WHERE post_id = {$topic->getId()} ORDER BY last_reply DESC LIMIT 1");
+        if (!$last_post_sql->is_ok()) return false;
+        $last_post = $last_post_sql->result();
+        $last_reply_time = $last_post['last_reply'];
+        if ($last_post_sql->rows() == 1) {
+          $sql = new SQL($link, "SELECT username FROM users JOIN posts ON users.id = {$last_post['author_id']}");
           if (!$sql->is_ok()) return false;
           $last_username = $sql->result()['username'];
         }

@@ -43,9 +43,9 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" form>סגור</button>
-        <button type="button" class="btn btn-primary" id="create-post-submit">פרסם</button>
-        <button type="button" class="btn btn-danger" id="create-post-reset">נקה את הטופס</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" form><i class="fas fa-times"></i> סגור</button>
+        <button type="button" class="btn btn-primary" id="create-post-submit"><i class="fas fa-sticky-note"></i> פרסם</button>
+        <button type="button" class="btn btn-danger" id="create-post-reset"><i class="fas fa-ban"></i> נקה את הטופס</button>
       </div>
     </div>
   </div>

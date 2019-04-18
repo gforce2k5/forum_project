@@ -29,9 +29,9 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" form>Close</button>
-        <button type="button" class="btn btn-primary" id="login-submit">התחבר</button>
-        <button type="button" class="btn btn-danger" id="login-reset">נקה את הטופס</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" form><i class="fas fa-times"></i> סגור</button>
+        <button type="button" class="btn btn-primary" id="login-submit"><i class="fas fa-sign-in-alt"></i> התחבר</button>
+        <button type="button" class="btn btn-danger" id="login-reset"><i class="fas fa-ban"></i> נקה את הטופס</button>
       </div>
     </div>
   </div>

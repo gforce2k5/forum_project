@@ -1,7 +1,7 @@
 <div class="row mt-5">
   <div class="col-6 text-right bg-dark">
     <h4>
-      <span class="text-light"><?= $pinned ? 'הכרזות' : 'נושאים' ?></span>
+      <span class="text-light"><?= $pinned ? '<i class="fas fa-thumbtack"></i> הכרזות' : '<i class="fas fa-sticky-note"></i> נושאים' ?></span>
     </h4>
   </div>
   <div class="col-2 text-center bg-dark text-light"><h4>תגובות</h4></div>

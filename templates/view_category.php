@@ -1,8 +1,8 @@
 <div class="container">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="./">עמוד הבית</a></li>
-      <li class="breadcrumb-item active"><?= $cat->get_name() ?></li>
+      <li class="breadcrumb-item"><a href="./"><i class="fas fa-home"></i> עמוד הבית</a></li>
+      <li class="breadcrumb-item active"><i class="fas fa-circle-notch"></i> <?= $cat->get_name() ?></li>
     </ol>
   </nav>
   <div class="row">
