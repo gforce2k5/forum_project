@@ -4,7 +4,6 @@
     private $id = null;
     private $name = '';
     private $cat_order = null;
-    private $active = true;
 
     static function show_category_list($link) {
       $sql = new SQL($link, "SELECT name, id FROM categories");
@@ -17,25 +16,23 @@
     }
 
     static function category_from_sql($sql_result) {
-      return new Category($sql_result['name'], $sql_result['cat_order'], $sql_result['active'], $sql_result['id']);
+      return new Category($sql_result['name'], $sql_result['cat_order'], $sql_result['id']);
     }
 
-    function __construct($name, $cat_order = null, $active = true, $id = null) {
+    function __construct($name, $cat_order = null, $id = null) {
       $this->name = $name;
       $this->cat_order = $cat_order;
-      $this->active = $active;
       $this->id = $id;
     }
 
     function add_to_db($link) {
       $name = mysqli_real_escape_string($link, $this->name);
       $cat_order = mysqli_real_escape_string($link, $this->cat_order);
-      $active = mysqli_real_escape_string($link, $this->active);
       $sql = new SQL($link, "SELECT id FROM categories WHERE name = '$name'");
 
       if($sql->is_ok() && $sql->rows() >= 1) return false;
 
-      $sql = new SQL($link, "INSERT INTO categories (name, cat_order, active) VALUES('$name', '$cat_order', '$active')");
+      $sql = new SQL($link, "INSERT INTO categories (name, cat_order) VALUES('$name', '$cat_order')");
 
       if ($sql->is_ok()) {
         $this->id = $sql->get_id();
@@ -101,10 +98,6 @@
 
     function set_cat_order($value) {
       $this->cat_order = $value;
-    }
-
-    function is_active() {
-      return $this->active;
     }
   }
 
