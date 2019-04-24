@@ -12,10 +12,10 @@
 
             if(isset($_SESSION[$value])){
                 if($toDestroy){
-                   create_session();
+                   $this->create_session();
                 }
             }else{
-               create_session();
+               $this->create_session();
             }
         }
 

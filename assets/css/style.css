@@ -1,0 +1,23 @@
+body{
+  direction: rtl;
+}
+
+label.error {
+  color: red;
+}
+
+.bbcode-preview {
+  border: 1px solid black;
+  height: 200px;
+  overflow: scroll;
+  background: white;
+}
+
+.bb_bar {
+  background: white;
+  display: inline-block;
+}
+
+.icon {
+  font-size: 60px;
+}
