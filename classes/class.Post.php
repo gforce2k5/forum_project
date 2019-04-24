@@ -71,7 +71,6 @@ class Post{
         $forumId = $this->forumId ? "'{$this->forumId}'" : "NULL";
         $postId = $this->postId ? "'{$this->postId}'" : "NULL";
         $sql = new SQL($this->_DB, "UPDATE {$this->table} SET title = '{$this->title}', content = '{$this->content}', author_id = {$this->authorId}, post_id = {$postId}, forum_id = {$forumId}, is_pinned = {$this->isPinned}, is_locked = {$this->isLocked} WHERE id = {$this->_id};");
-        print_array(mysqli_error_list($this->_DB));
         return $sql->is_ok();
     }
 

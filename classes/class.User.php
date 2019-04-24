@@ -32,17 +32,25 @@
         return new User($username, $password, $first_name, $last_name, $email, $id, $avatar, $register_date,
           $last_entry, $signature, $status);
       }
+      return null;
     }
 
-    static function get_active_users($link) {
-      $sql = new SQL($link, "SELECT id, username FROM users WHERE status >= 1");
+    static function get_active_users($link, $fid = null) {
+      $sql = new SQL($link, "SELECT id, username FROM users WHERE status >= 1 ORDER BY username");
       
       if (!$sql->is_ok()) return false;
 
       $html = '';
 
       while ($user = $sql->result()) {
-        $html .= '<option value="'.$user['id'].'">'.sanitize_input($user['username']).'</option>';
+        $html .= '<option value="'.$user['id'].'"';
+        if ($fid) {
+          $user_sql = new SQL($link, "SELECT user_id FROM forum_managers WHERE forum_id = $fid AND user_id = {$user['id']}");
+          if ($user_sql->rows() > 0) {
+            $html .= ' selected';
+          }
+        }
+        $html .= '>'.sanitize_input($user['username']).'</option>';
       }
 
       return $html;

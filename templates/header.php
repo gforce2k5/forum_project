@@ -26,7 +26,7 @@
 
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="./"><i class="fas fa-home"></i> בית<span class="sr-only">(current)</span></a>
             </li>
             <?php
@@ -39,13 +39,19 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                       <a class="dropdown-item" data-toggle="modal" data-target="#create-forum-modal">צור פורום</a>
+                      <a class="dropdown-item" href="manage_forums.php">ניהול פורומים</a>
                     </div>
                   </li>
             <?php
                 }
             ?>
                 <li class="nav-item">
-                  <a class="nav-link" href="functions/logout.php">יציאה</a>
+                  <span class="navbar-text">
+                    שלום <?= $current_user->get_first_name() ?> <?= $current_user->get_last_name() ?>
+                  </span>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="functions/logout.php"><i class="fas fa-door-open"></i> יציאה</a>
                 </li>
             <?php
               } else {

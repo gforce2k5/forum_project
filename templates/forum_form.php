@@ -45,7 +45,6 @@
               <?= User::get_active_users($link) ?>
             </select>
           </div>
-          <input type="hidden" name="cat_order" value="">
           <input type="hidden" name="Submit" value="Submit">
         </form>
       </div>

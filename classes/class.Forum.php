@@ -56,6 +56,18 @@
       return true;
     }
 
+    function edit_db($link) {
+      $name = mysqli_real_escape_string($link, $this->name);
+      $description = mysqli_real_escape_string($link, $this->description);
+      $cat_id = mysqli_real_escape_string($link, $this->cat_id);
+      $cat_order = mysqli_real_escape_string($link, $this->cat_order);
+      $active = mysqli_real_escape_string($link, $this->active);
+
+      $sql = new SQL($link, "UPDATE forums SET name = '$name', description = '$description', cat_id = '$cat_id', cat_order = '$cat_order', active = '$active' WHERE id = {$this->id}");
+
+      return $sql->is_ok();
+    }
+
     function get_name() {
       return $this->name;
     }
@@ -97,7 +109,7 @@
     }
 
     function is_active() {
-      return $this->active;
+      return $this->active == 1;
     }
 
     function set_active($active) {

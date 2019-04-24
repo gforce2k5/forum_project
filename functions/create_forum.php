@@ -86,6 +86,18 @@
       header("location: ../");
     }
 
+    foreach($manager_ids as $key => $manager_id) {
+      $manager_id = mysqli_real_escape_string($link, intval($manager_id));
+      $sql = new SQL($link, "SELECT id FROM users WHERE id = '$manager_id' AND status >= 1");
+  
+      if (!$sql->is_ok() || ($sql->is_ok() && $sql->rows() == 0)) {
+        $errors = add_error('sql', 'המשתמש שנבחר לא קיים או לא פעיל', $errors);
+        $_SESSION['errors'] = serialize($errors);
+        header("location: ../");
+      }
+      $manager_ids[$key] = $manager_id;
+    }
+
     $forum = new Forum($name, $description, $cat_id);
     if (!$forum->add_to_db($link)) {
       $errors = add_error('sql', 'פורום בעל שם זהה כבר קיים', $errors);
@@ -96,15 +108,6 @@
     $forum_id = $forum->get_id();
 
     foreach($manager_ids as $key => $manager_id) {
-      $sql = new SQL($link, "SELECT id FROM users WHERE id = '$manager_id' AND status >= 1");
-  
-      if (!$sql->is_ok() || ($sql->is_ok() && $sql->rows() == 0)) {
-        $errors = add_error('sql', 'המשתמש שנבחר לא קיים או לא פעיל', $errors);
-        $_SESSION['errors'] = serialize($errors);
-        header("location: ../");
-      }
-  
-      $manager_id = mysqli_real_escape_string($link, $manager_id);
   
       $sql = new SQL($link, "INSERT INTO forum_managers (user_id, forum_id) VALUES($manager_id, $forum_id)");
   

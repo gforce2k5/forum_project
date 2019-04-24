@@ -1,6 +1,17 @@
 <div class="col-6 text-right <?= $classes[$counter] ?>">
   <div class="row">
-    <div class="col-2 icon"><i class="fas fa-info-circle"></i></div>
+    <div class="col-2 icon">
+      <?php
+        if ($forum['active'] == 1) {
+      ?>
+          <i class="fas fa-info-circle"></i></div>
+      <?php
+        } else {
+      ?>
+          <i class="fas fa-lock"></i></div>
+      <?php
+        }
+      ?>
     <div class="col-10">
       <strong><a class="<?= explode(' ', $classes[$counter])[1] ?>" href="view_forum.php?f=<?= $forum['id'] ?>">
         <?= sanitize_input($forum['name']) ?>

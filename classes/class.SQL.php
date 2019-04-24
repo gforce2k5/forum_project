@@ -5,11 +5,13 @@
     private $q = '';
     private $sql = '';
     private $ok = false;
+    private $rows_updated = 0;
 
     function __construct($link, $q) {
       mysqli_query($link, "SET NAMES utf8");
       $this->q = trim(strtolower($q));
       $this->sql = mysqli_query($link, $q);
+      $this->rows_updated = mysqli_affected_rows($link);
       if (!$this->sql) {
         $error = mysqli_error($link);
         echo $q."<br/>";
@@ -19,6 +21,10 @@
         $this->ok = true;
         $this->id = mysqli_insert_id($link);
       }
+    }
+
+    function rows_updated() {
+      return $this->rows_updated;
     }
 
     function rows() {
