@@ -7,18 +7,21 @@
   }
 
   function renderData(data) {
-    console.log(data);
     var html = '<ul class="list-group" id="cat-list">';
     for (let i = 0; i < data.length; i++) {
       let cat = data[i];
       html += `
-        <li class="list-group-item drop" id="cat-${cat.id}" data-index="${i}">
+        <li class="list-group-item drop" id="cat-${cat.id}" data-index="${i}" data-id="${cat.id}">
           <div class="row">
             <div class="col-8">
               ${cat.name}
             </div>
-            <div class="col-4">
+            <div class="col-2">
               <button class="btn btn-warning cat-edit-btn">ערוך</button>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-sm btn-info up-btn"${i == 0 ? ' disabled' : ''}><i class="fas fa-arrow-circle-up"></i></button>
+              <button class="btn btn-sm btn-info down-btn"${i == data.length - 1 ? ' disabled' : ''}><i class="fas fa-arrow-circle-down"></i></button>
             </div>
           </div>
           <ul class="list-group mt-3" id="cat-${cat.id}-list">
@@ -26,14 +29,18 @@
       for (let j = 0; j < cat.forums.length; j++) {
         let forum = cat.forums[j];
         html += `
-          <li class="list-group-item drag" id="forum-${forum.id}" draggable="true" data-index="${j}">
+          <li class="list-group-item drag" id="forum-${forum.id}" draggable="true" data-index="${j}" data-id="${forum.id}">
             <div class="row">
-              <div class="col-7">
+              <div class="col-5">
                 ${forum.name}
               </div>
               <div class="col-5">
                 <button class="btn btn-warning forum-edit-btn">ערוך</button>
                 <button data-toggle="modal" data-target="#delete-forum-modal" class="btn btn-danger forum-delete">מחק</button>
+              </div>
+              <div class="col-2">
+                <button class="btn btn-sm btn-info up-btn"${j == 0 ? ' disabled' : ''}><i class="fas fa-arrow-circle-up"></i></button>
+                <button class="btn btn-sm btn-info down-btn"${j == cat.forums.length - 1 ? ' disabled' : ''}><i class="fas fa-arrow-circle-down"></i></button>
               </div>
             </div>
           </li>
@@ -46,10 +53,53 @@
 
     $('#category-view').html(html);
 
+    $('.up-btn').on('click', function(e) {
+      var parent = $(this).parent().parent().parent();
+      var index = parseInt(parent.data('index'));
+
+      if (index == 0) return;
+
+      var type = parent.attr('id').split('-')[0];
+
+      if (type == 'forum') {
+        var cat_index = parseInt(parent.parent().parent().data('index'));
+        arraySwap(categories[cat_index].forums, index, index - 1);
+      } else {
+        var temp = categories[index - 1];
+        arraySwap(categories, index, index - 1);
+      }
+
+      renderData(categories);
+      showSave();
+    });
+
+    $('.down-btn').on('click', function(e) {
+      var parent = $(this).parent().parent().parent();
+      var index = parseInt(parent.data('index'));
+
+      var type = parent.attr('id').split('-')[0];
+
+      if (type == 'forum') {
+        var cat_index = parseInt(parent.parent().parent().data('index'));
+        if (index == categories[cat_index].forums.length + 1) return;
+        arraySwap(categories[cat_index].forums, index, index + 1);
+      } else {
+        if (index == categories.length + 1) return;
+        arraySwap(categories, index, index + 1);
+      }
+
+      renderData(categories);
+      showSave();
+    });
+
     $('.forum-edit-btn').on('click', function(e) {
       let cat_index = $(this).parent().parent().parent().parent().parent().data('index');
       let forum_index = $(this).parent().parent().parent().data('index');
       renderForumForm(categories[cat_index].forums[forum_index]);
+    });
+
+    $('.forum-delete').on('click', function(e) {
+      $('#delete-forum-submit').data('index', $(this).parent().parent().parent().data('id'));
     });
 
     $('.cat-edit-btn').on('click', function(e) {
@@ -81,14 +131,8 @@
       if (oldCatIndex != newCatIndex) {
         $(`#${target.attr('id')} > ul`).append(dataElement);
         categories[newCatIndex].forums.push(categories[oldCatIndex].forums.splice(forumIndex, 1)[0]);
-        dataElement.data('index', categories[newCatIndex].forums.length - 1);
-        if ($('#buttons').length == 0) {
-          $('#cat-list').append('<li class="list-group-item" id="buttons"><button class="btn btn-primary" id="save-changes">שמור</button><button class="btn btn-secondary" id="cancel-changes">בטל שינויים</button></li>');
-
-          $('#cancel-changes').on('click', function(e) {
-            getData();
-          })
-        }
+        renderData(categories);
+        showSave();
       }
     });
   }
@@ -206,7 +250,6 @@
 
         if ($('.error').length == 0) {
           $.post(`admin/edit_forum.php?fid=${forum.id}`, {name: name, description: description, managers: JSON.stringify(managers), id: forum.id, active: active}, function(data) {
-            console.log(data);
             getData();
             $('#edit-form').html('');
           });
@@ -222,5 +265,32 @@
   }
 
   getData();
+
+  $('#delete-forum-submit').on('click', function(e) {
+    $.post('admin/delete_forum.php', {fid: $(this).data('index')}, function(data) {
+      getData();
+      $('#delete-forum-modal').modal('hide');
+    })
+  });
+
+  function showSave() {
+    if ($('#buttons').length == 0) {
+      $('#cat-list').append('<li class="list-group-item" id="buttons"><button class="btn btn-primary" id="save-changes">שמור (קטגוריות ריקות יימחקו)</button><button class="btn btn-secondary" id="cancel-changes">בטל שינויים</button></li>');
+      $('#save-changes').on('click', function() {
+        $.post('admin/update_order.php', {categories: JSON.stringify(categories)}, function(data) {
+          getData();
+        });
+      });
+      $('#cancel-changes').on('click', function() {
+        getData();
+      });
+    }
+  }
+
+  function arraySwap(arr, index1, index2) {
+    var temp = arr[index1];
+    arr[index1] = arr[index2];
+    arr[index2] = temp;
+  }
 
 })(jQuery);

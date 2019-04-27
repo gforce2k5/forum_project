@@ -25,7 +25,7 @@
       return null;
     }
 
-    function __construct($name, $description, $cat_id, $id = null, $create_date = null, $cat_order = '', $active = true) {
+    function __construct($name, $description, $cat_id, $id = null, $create_date = null, $cat_order = 'zzzzz', $active = true) {
       $this->name = $name;
       $this->description = $description;
       $this->create_date = $create_date ? $create_date : $this->create_date;

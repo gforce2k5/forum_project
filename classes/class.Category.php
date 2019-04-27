@@ -6,7 +6,7 @@
     private $cat_order = null;
 
     static function show_category_list($link) {
-      $sql = new SQL($link, "SELECT name, id FROM categories");
+      $sql = new SQL($link, "SELECT name, id FROM categories ORDER BY cat_order");
       if (!$sql->is_ok()) return false;
       $html = '';
       while ($cat = $sql->result()) {
