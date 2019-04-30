@@ -11,6 +11,7 @@
   require_once SITE_ROOT."/bbParser.php";
 
   $link = mysqli_connect($dbhost, $dbusername, $dbpassword, $dbname) or die(mysqli_connect_error($Link));
+  $sql = new SQL($link, "SET NAMES utf8");
 
   $classes = ['bg-white text-dark', 'bg-secondary text-light'];
 

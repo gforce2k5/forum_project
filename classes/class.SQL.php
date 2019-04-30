@@ -8,7 +8,6 @@
     private $rows_updated = 0;
 
     function __construct($link, $q) {
-      mysqli_query($link, "SET NAMES utf8");
       $this->q = trim(strtolower($q));
       $this->sql = mysqli_query($link, $q);
       $this->rows_updated = mysqli_affected_rows($link);
